@@ -13,6 +13,7 @@ public class MainApplet extends Applet
 	public void init()
 	{
 		setLayout(new BorderLayout());
+		MainApp.init();
 		add(Engine.getInstance(), BorderLayout.CENTER);
 	}
 	
