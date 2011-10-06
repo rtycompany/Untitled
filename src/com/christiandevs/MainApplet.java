@@ -4,7 +4,7 @@ package com.christiandevs;
 import java.applet.Applet;
 import java.awt.BorderLayout;
 
-import com.javapunk.Engine;
+import com.flume2d.Engine;
 
 public class MainApplet extends Applet
 {

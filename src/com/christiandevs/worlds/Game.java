@@ -1,6 +1,6 @@
 package com.christiandevs.worlds;
 
-import com.javapunk.World;
+import com.flume2d.World;
 
 public class Game extends World
 {

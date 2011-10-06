@@ -5,8 +5,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import com.christiandevs.worlds.Game;
-import com.javapunk.Engine;
+import com.christiandevs.worlds.*;
+import com.flume2d.Engine;
 
 public class MainApp
 {
