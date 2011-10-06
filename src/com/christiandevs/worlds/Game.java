@@ -1,8 +1,8 @@
 package com.christiandevs.worlds;
 
-import com.flume2d.World;
+import com.flume2d.Scene;
 
-public class Game extends World
+public class Game extends Scene
 {
 
 }
