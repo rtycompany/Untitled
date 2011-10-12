@@ -1,4 +1,4 @@
-package com.christiandevs.worlds;
+package com.christiandevs.scenes;
 
 import com.flume2d.Scene;
 

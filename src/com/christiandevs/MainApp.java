@@ -1,67 +1,22 @@
 package com.christiandevs;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import com.christiandevs.worlds.*;
+import com.badlogic.gdx.backends.jogl.JoglApplication;
+import com.christiandevs.scenes.*;
 import com.flume2d.Engine;
 
-public class MainApp
+public class MainApp extends Engine
 {
-	private static final String frameTitle = "Untitled Game";
-	private static final boolean fullscreen = false;
+	private static final String frameTitle = "Game";
 	
-	private static final Engine engine = Engine.getInstance();
-	
-	public static void init()
+	@Override
+	public void create()
 	{
-		engine.init(640, 480);
-		engine.world = new Game();
-	}
-	
-	public static void start()
-	{
-		engine.start();
-	}
-	
-	public static void stop()
-	{
-		engine.stop();
+		super.create();
+		scene = new Game();
 	}
 	
 	public static void main(String[] args)
 	{
-		init();
-		JFrame frame = new JFrame(frameTitle);
-		
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(engine, BorderLayout.CENTER);
-		
-		if (fullscreen)
-		{
-			frame.setUndecorated(true);
-			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		}
-		
-		frame.setContentPane(panel);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
-		frame.addComponentListener(new ComponentListener() {
-			public void componentResized(ComponentEvent e) {
-				Component c = (Component)e.getSource();
-				Dimension newSize = c.getSize();
-				engine.setScreen(newSize.width, newSize.height);
-			}
-			public void componentHidden(ComponentEvent e) { }
-			public void componentMoved(ComponentEvent e) { }
-			public void componentShown(ComponentEvent e) { }
-		});
-
-		start();
+		new JoglApplication(new MainApp(), frameTitle, 800, 600, false);
 	}
 }
