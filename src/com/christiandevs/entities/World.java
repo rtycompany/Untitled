@@ -4,8 +4,7 @@ import java.util.Iterator;
 
 import com.flume2d.*;
 import com.flume2d.graphics.*;
-import com.flume2d.utils.Input;
-import com.flume2d.utils.Key;
+import com.flume2d.input.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.tiled.*;
 
@@ -28,7 +27,7 @@ public class World extends Entity
 	{
 		player = new Player(0, this);
 		scene.add(player);
-		load("maps/world.tmx");
+		load("example.tmx");
 	}
 	
 	public void load(String filename)
@@ -52,9 +51,10 @@ public class World extends Entity
 		while (it.hasNext())
 		{
 			TiledLayer layer = it.next();
-			Tilemap map = new Tilemap("gfx/tileset.png",
-					tmx.width * tmx.tileWidth, tmx.height * tmx.tileHeight,
-					tmx.tileWidth, tmx.tileHeight);
+			Tilemap map = new Tilemap("tmw_desert_spacing.png",
+					tmx.tileWidth, tmx.tileHeight,
+					tmx.width, tmx.height,
+					1, 1);
 			for (int y = 0; y < layer.getHeight(); y++)
 			{
 				for (int x = 0; x < layer.getWidth(); x++)

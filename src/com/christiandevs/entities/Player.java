@@ -13,11 +13,9 @@ public class Player extends Entity
 
 	public Player(int type, World world)
 	{
-		super(0, 0);
+		super(200, 200);
 		
-		setMask(new AABB(16, 16));
-		
-		sprite = new Spritemap("gfx/character.png", 16, 16);
+		sprite = new Spritemap("tmw_desert_spacing.png", 32, 32);
 		type = type * 8;
 		sprite.add("down",  new int[]{ type + 0, type + 1 });
 		sprite.add("left",  new int[]{ type + 2, type + 3 });
@@ -25,6 +23,8 @@ public class Player extends Entity
 		sprite.add("right", new int[]{ type + 6, type + 7 });
 		sprite.play("down");
 		setGraphic(sprite);
+		
+		setMask(new AABB(sprite.frameWidth, sprite.frameHeight));
 		
 		this.layer = 5;
 		this.type = "player";
@@ -39,13 +39,13 @@ public class Player extends Entity
 	private void processInput()
 	{
 		if (Input.check("up"))
-			y += 16;
+			y += sprite.frameHeight;
 		if (Input.check("down"))
-			y -= 16;
+			y -= sprite.frameHeight;
 		if (Input.check("left"))
-			x -= 16;
+			x -= sprite.frameWidth;
 		if (Input.check("right"))
-			x += 16;
+			x += sprite.frameWidth;
 	}
 	
 	private void moveCamera()

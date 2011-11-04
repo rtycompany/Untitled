@@ -12,11 +12,11 @@ public class MainApp extends Engine
 	public void create()
 	{
 		super.create();
-		scene = new Game();
+		Engine.setScene(new Game());
 	}
 	
 	public static void main(String[] args)
 	{
-		new JoglApplication(new MainApp(), frameTitle, 800, 600, false);
+		new JoglApplication(new MainApp(), frameTitle, 800, 600, true);
 	}
 }
