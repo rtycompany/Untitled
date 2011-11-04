@@ -3,7 +3,7 @@ package com.christiandevs.entities;
 import com.flume2d.*;
 import com.flume2d.graphics.Spritemap;
 import com.flume2d.masks.AABB;
-import com.flume2d.utils.*;
+import com.flume2d.input.*;
 
 public class Player extends Entity
 {
@@ -30,10 +30,10 @@ public class Player extends Entity
 		this.type = "player";
 		this.world = world;
 		
-		Input.add("up", new int[]{ Key.UP });
-		Input.add("down", new int[]{ Key.DOWN });
-		Input.add("left", new int[]{ Key.LEFT });
-		Input.add("right", new int[]{ Key.RIGHT });
+		Input.define("up", new int[]{ Key.UP });
+		Input.define("down", new int[]{ Key.DOWN });
+		Input.define("left", new int[]{ Key.LEFT });
+		Input.define("right", new int[]{ Key.RIGHT });
 	}
 	
 	private void processInput()
