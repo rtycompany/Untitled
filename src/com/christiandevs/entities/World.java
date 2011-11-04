@@ -1,18 +1,20 @@
 package com.christiandevs.entities;
 
-import java.util.Iterator;
+import java.util.*;
 
 import com.flume2d.*;
 import com.flume2d.graphics.*;
-import com.flume2d.input.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.tiled.*;
+import com.christiandevs.ai.*;
 
 public class World extends Entity
 {
 	
 	private Player player;
 	private GraphicList list;
+	private PathFinder pathFinder;
+	private TiledMap tmx;
 	
 	public int width, height;
 
@@ -32,11 +34,11 @@ public class World extends Entity
 	
 	public void load(String filename)
 	{
-		TiledMap tmx = TiledLoader.createMap(Gdx.files.internal(filename));
+		tmx = TiledLoader.createMap(Gdx.files.internal(filename));
 		if (tmx == null) return;
 		
-		width = tmx.width;
-		height = tmx.height;
+		width = tmx.width * tmx.tileWidth;
+		height = tmx.height * tmx.tileHeight;
 		
 		loadMap(tmx);
 		loadObjects(tmx);
@@ -58,6 +60,10 @@ public class World extends Entity
 					tmx.tileWidth, tmx.tileHeight,
 					tmx.width, tmx.height,
 					set.spacing, set.margin);
+			
+			if (pathFinder == null)
+				pathFinder = new PathFinder(map);
+			
 			for (int y = 0; y < layer.getHeight(); y++)
 			{
 				for (int x = 0; x < layer.getWidth(); x++)
@@ -109,6 +115,12 @@ public class World extends Entity
 				}
 			}
 		}
+	}
+
+	public List<Node> getPath(int x, int y, int gx, int gy)
+	{
+		pathFinder.setGoal(gx / tmx.tileWidth, gy / tmx.tileHeight);
+		return pathFinder.compute(new Node(x / tmx.tileWidth, y / tmx.tileHeight));
 	}
 	
 }

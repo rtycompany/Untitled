@@ -1,5 +1,8 @@
 package com.christiandevs.entities;
 
+import java.util.List;
+
+import com.christiandevs.ai.Node;
 import com.flume2d.*;
 import com.flume2d.graphics.Spritemap;
 import com.flume2d.masks.AABB;
@@ -10,10 +13,11 @@ public class Player extends Entity
 	
 	protected Spritemap sprite;
 	private World world;
+	private List<Node> path;
 
 	public Player(int type, World world)
 	{
-		super(200, 200);
+		super(0, 0);
 		
 		sprite = new Spritemap("tmw_desert_spacing.png", 32, 32);
 		type = type * 8;
@@ -29,23 +33,18 @@ public class Player extends Entity
 		this.layer = 5;
 		this.type = "player";
 		this.world = world;
-		
-		Input.define("up", new int[]{ Key.UP });
-		Input.define("down", new int[]{ Key.DOWN });
-		Input.define("left", new int[]{ Key.LEFT });
-		Input.define("right", new int[]{ Key.RIGHT });
 	}
 	
 	private void processInput()
 	{
-		if (Input.check("up"))
-			y += sprite.frameHeight;
-		if (Input.check("down"))
-			y -= sprite.frameHeight;
-		if (Input.check("left"))
-			x -= sprite.frameWidth;
-		if (Input.check("right"))
-			x += sprite.frameWidth;
+		if (Input.touched)
+		{
+			Touch touch = Input.touches.get(0);
+			touch.x += scene.camera.x;
+			touch.y += scene.camera.y;
+			path = world.getPath((int) x, (int) y, touch.x, touch.y);
+			System.out.println(path);
+		}
 	}
 	
 	private void moveCamera()
@@ -55,13 +54,13 @@ public class Player extends Entity
 		
 		if (scene.camera.x < 0)
 			scene.camera.x = 0;
-//		if (scene.camera.x > world.width - Engine.width)
-//			scene.camera.x = world.width - Engine.width;
+		if (scene.camera.x > world.width - Engine.width)
+			scene.camera.x = world.width - Engine.width;
 		
 		if (scene.camera.y < 0)
 			scene.camera.y = 0;
-//		if (scene.camera.y > world.height - Engine.height)
-//			scene.camera.y = world.height - Engine.height;
+		if (scene.camera.y > world.height - Engine.height)
+			scene.camera.y = world.height - Engine.height;
 	}
 	
 	public void update()

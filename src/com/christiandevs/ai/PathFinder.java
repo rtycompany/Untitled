@@ -25,27 +25,10 @@ import com.flume2d.graphics.Tilemap;
 /*
  * Example.
  */
-public class PathFinder extends AStar<PathFinder.Node>
+public class PathFinder extends AStar<Node>
 {
 	private Tilemap map;
 	private Node goal;
-
-	public static class Node
-	{
-			public int x;
-			public int y;
-			
-			Node(int x, int y)
-			{
-				this.x = x; 
-				this.y = y;
-			}
-			
-			public String toString()
-			{
-				return "(" + x + ", " + y + ") ";
-			} 
-	}
 	
 	public PathFinder(Tilemap map)
 	{
@@ -90,39 +73,9 @@ public class PathFinder extends AStar<PathFinder.Node>
 				ret.add(new Node(x, y + 1));
 
 		if(x < goal.x && map.getTile(x + 1, y) == 1)
-				ret.add(new Node(x+1, y));
+				ret.add(new Node(x + 1, y));
 
 		return ret;
-	}
-
-	public static void main(String [] args)
-	{
-		Tilemap map = new Tilemap(null, 16, 16, 2, 3);
-		PathFinder pf = new PathFinder(map);
-		pf.setGoal(2, 3);
-
-		System.out.println("Find a path from the top left corner to the right bottom one.");
-
-		long begin = System.currentTimeMillis();
-		List<Node> nodes = pf.compute(new PathFinder.Node(0, 0));
-		long end = System.currentTimeMillis();
-
-
-		System.out.println("Time = " + (end - begin) + " ms" );
-		System.out.println("Expanded = " + pf.getExpandedCounter());
-		System.out.println("Cost = " + pf.getCost());
-		
-		if(nodes == null)
-		{
-			System.out.println("No path");
-		}
-		else
-		{
-			System.out.print("Path = ");
-			for(Node n : nodes)
-				System.out.print(n);
-			System.out.println();
-		}
 	}
 
 }
