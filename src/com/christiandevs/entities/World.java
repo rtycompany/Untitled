@@ -47,6 +47,9 @@ public class World extends Entity
 		if (list.size() > 0)
 			list.clear();
 		
+		// get the first tileset
+		TileSet set = findTileSet(tmx, 1);
+		
 		Iterator<TiledLayer> it = tmx.layers.iterator();
 		while (it.hasNext())
 		{
@@ -54,7 +57,7 @@ public class World extends Entity
 			Tilemap map = new Tilemap("tmw_desert_spacing.png",
 					tmx.tileWidth, tmx.tileHeight,
 					tmx.width, tmx.height,
-					1, 1);
+					set.spacing, set.margin);
 			for (int y = 0; y < layer.getHeight(); y++)
 			{
 				for (int x = 0; x < layer.getWidth(); x++)
@@ -65,6 +68,19 @@ public class World extends Entity
 			list.add(map);
 		}
 		setGraphic(list);
+	}
+	
+	private TileSet findTileSet(TiledMap tmx, int gid)
+	{
+		TileSet set;
+		Iterator<TileSet> it = tmx.tileSets.iterator();
+		while (it.hasNext())
+		{
+			set = it.next();
+			if (set.firstgid <= gid)
+				return set;
+		}
+		return null;
 	}
 	
 	private void loadObjects(TiledMap tmx)
