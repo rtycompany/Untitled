@@ -32,8 +32,8 @@ public class PathFinder extends AStar<Node>
 	
 	public PathFinder(Tilemap map)
 	{
-		this.map = map;
 		goal = new Node(0, 0);
+		this.map = map;
 	}
 	
 	public void setGoal(int x, int y)
@@ -52,7 +52,7 @@ public class PathFinder extends AStar<Node>
 		if(from.x == to.x && from.y == to.y)
 			return 0.0;
 
-		if(map.getTile(to.x, to.y) == 1)
+		if(testTile(to.x, to.y))
 			return 1.0;
 
 		return Double.MAX_VALUE;
@@ -63,17 +63,32 @@ public class PathFinder extends AStar<Node>
 		/* Use the Manhattan distance heuristic.  */
 		return new Double(Math.abs(goal.x - to.x) + Math.abs(goal.y - to.y));
 	}
+	
+	protected boolean testTile(int x, int y)
+	{
+		if (map.getTile(x, y) > 0)
+			return true;
+		return false;
+	}
 
 	protected List<Node> generateSuccessors(Node node)
 	{
 		List<Node> ret = new LinkedList<Node>();
+		
 		int x = node.x;
 		int y = node.y;
-		if(y < goal.y && map.getTile(x, y + 1) == 1)
-				ret.add(new Node(x, y + 1));
-
-		if(x < goal.x && map.getTile(x + 1, y) == 1)
-				ret.add(new Node(x + 1, y));
+		
+		if(x < goal.x && testTile(x + 1, y))
+			ret.add(new Node(x + 1, y));
+		
+		if(x > goal.x && testTile(x - 1, y))
+			ret.add(new Node(x - 1, y));
+		
+		if(y < goal.y && testTile(x, y + 1))
+			ret.add(new Node(x, y + 1));
+		
+		if(y > goal.y && testTile(x, y - 1))
+			ret.add(new Node(x, y - 1));
 
 		return ret;
 	}

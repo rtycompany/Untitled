@@ -13,18 +13,20 @@ public class Player extends Entity
 	
 	protected Spritemap sprite;
 	private World world;
+	
 	private List<Node> path;
+	private int pathIndex;
 
 	public Player(int type, World world)
 	{
 		super(0, 0);
 		
-		sprite = new Spritemap("tmw_desert_spacing.png", 32, 32);
+		sprite = new Spritemap("gfx/character.png", 16, 16);
 		type = type * 8;
-		sprite.add("down",  new int[]{ type + 0, type + 1 });
-		sprite.add("left",  new int[]{ type + 2, type + 3 });
-		sprite.add("up",    new int[]{ type + 4, type + 5 });
-		sprite.add("right", new int[]{ type + 6, type + 7 });
+		sprite.add("down",  new int[]{ type + 0, type + 1 }, 0.3f);
+		sprite.add("left",  new int[]{ type + 2, type + 3 }, 0.3f);
+		sprite.add("up",    new int[]{ type + 4, type + 5 }, 0.3f);
+		sprite.add("right", new int[]{ type + 6, type + 7 }, 0.3f);
 		sprite.play("down");
 		setGraphic(sprite);
 		
@@ -43,7 +45,16 @@ public class Player extends Entity
 			touch.x += scene.camera.x;
 			touch.y += scene.camera.y;
 			path = world.getPath((int) x, (int) y, touch.x, touch.y);
-			System.out.println(path);
+			pathIndex = 0;
+			if (path == null)
+				System.out.println("No path");
+			else
+			{
+				for (Node node : path)
+				{
+					System.out.println(node);
+				}
+			}
 		}
 	}
 	
@@ -67,6 +78,17 @@ public class Player extends Entity
 	{
 		processInput();
 		moveCamera();
+		
+		if (path != null && pathIndex < path.size())
+		{
+			Node n = path.get(pathIndex);
+			if (n != null)
+			{
+				x = n.x * 16 + 8;
+				y = n.y * 16 + 8;
+				pathIndex += 1;
+			}
+		}
 		super.update();
 	}
 	

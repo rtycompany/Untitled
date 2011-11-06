@@ -14,6 +14,7 @@ public class World extends Entity
 	private Player player;
 	private GraphicList list;
 	private PathFinder pathFinder;
+	private Tilemap pathMap;
 	private TiledMap tmx;
 	
 	public int width, height;
@@ -29,7 +30,7 @@ public class World extends Entity
 	{
 		player = new Player(0, this);
 		scene.add(player);
-		load("example.tmx");
+		load("maps/world.tmx");
 	}
 	
 	public void load(String filename)
@@ -40,8 +41,12 @@ public class World extends Entity
 		width = tmx.width * tmx.tileWidth;
 		height = tmx.height * tmx.tileHeight;
 		
+		pathMap = new Tilemap(null, tmx.tileWidth, tmx.tileHeight, tmx.width, tmx.height);
+		
 		loadMap(tmx);
 		loadObjects(tmx);
+		
+		pathFinder = new PathFinder(pathMap);
 	}
 	
 	private void loadMap(TiledMap tmx)
@@ -56,19 +61,20 @@ public class World extends Entity
 		while (it.hasNext())
 		{
 			TiledLayer layer = it.next();
-			Tilemap map = new Tilemap("tmw_desert_spacing.png",
+			Tilemap map = new Tilemap("gfx/tileset.png",
 					tmx.tileWidth, tmx.tileHeight,
 					tmx.width, tmx.height,
 					set.spacing, set.margin);
 			
-			if (pathFinder == null)
-				pathFinder = new PathFinder(map);
-			
+			int tile = 0;
 			for (int y = 0; y < layer.getHeight(); y++)
 			{
 				for (int x = 0; x < layer.getWidth(); x++)
 				{
-					map.setTile(x, y, layer.tiles[y][x] - 1);
+					tile = layer.tiles[y][x] - set.firstgid;
+					map.setTile(x, y, tile);
+					if (tile > -1)
+						pathMap.setTile(x, y, tile);
 				}
 			}
 			list.add(map);
@@ -101,12 +107,12 @@ public class World extends Entity
 				TiledObject obj = it.next();
 				
 				int x = obj.x;
-				int y = (tmx.height * tmx.tileHeight) - obj.y;
+				int y = obj.y;
 				
 				if (obj.type.equals("player"))
 				{
 					player.x = x + 8;
-					player.y = y - 8;
+					player.y = y + 8;
 				}
 				else if (obj.type.equals("town") || obj.type.equals("dungeon"))
 				{

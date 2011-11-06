@@ -28,7 +28,7 @@ import java.util.*;
 public abstract class AStar<T>
 {
 	
-	private class Path
+	private class Path implements Comparable<T>
 	{
 		public T point;
 		public Double f;
@@ -67,6 +67,23 @@ public abstract class AStar<T>
 		{
 			return point;
 		}
+		
+		/**
+         * Compare to another object using the total cost f.
+         *
+         * @param o The object to compare to.
+         * @see       Comparable#compareTo()
+         * @return <code>less than 0</code> This object is smaller
+         * than <code>0</code>;
+         *        <code>0</code> Object are the same.
+         *        <code>bigger than 0</code> This object is bigger
+         * than o.
+         */
+        public int compareTo(Object o){
+            @SuppressWarnings("unchecked")
+			Path p = (Path) o;
+            return (int)(f - p.f);
+        }
 
 		/**
 		 * Set the 
@@ -185,7 +202,8 @@ public abstract class AStar<T>
 
 		List<T> successors = generateSuccessors(p);
 
-		for(T t : successors){
+		for(T t : successors)
+		{
 			Path newPath = new Path(path);
 			newPath.setPoint(t);
 			f(newPath, path.getPoint(), t);
@@ -253,7 +271,8 @@ public abstract class AStar<T>
 				expand(p);
 			}
 		}
-		catch(Exception e){
+		catch(Exception e)
+		{
 			e.printStackTrace();
 		}
 		return null;
