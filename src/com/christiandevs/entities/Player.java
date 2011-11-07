@@ -66,6 +66,7 @@ public class Player extends Character
 			scene.camera.y = world.height - Engine.height;
 	}
 	
+	@Override
 	public void update()
 	{
 		processInput();

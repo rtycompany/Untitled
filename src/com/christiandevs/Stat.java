@@ -64,6 +64,11 @@ public class Stat
 		return value;
 	}
 	
+	public void refill()
+	{
+		value = maxValue;
+	}
+	
 	/**
 	 * Increases/decreases max value based on modifier
 	 * @param maxModifier the amount to modify the stat max (up/down)

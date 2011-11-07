@@ -12,6 +12,7 @@ public abstract class Character extends Entity
 	protected Stat health;
 	protected int attack;
 	protected int armor;
+	protected int level;
 	
 	protected World world;
 	
@@ -28,9 +29,17 @@ public abstract class Character extends Entity
 		super(x, y);
 		this.world = world;
 		
-		health = new Stat(10);
+		health = new Stat(50);
 		armor = 1;
 		attack = 1;
+		level = 1;
+	}
+	
+	public void levelUp()
+	{
+		level += 1;
+		health.modifyMax(level * 5);
+		health.refill();
 	}
 	
 	public void takeDamage(int value)

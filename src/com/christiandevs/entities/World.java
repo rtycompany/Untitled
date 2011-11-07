@@ -113,24 +113,27 @@ public class World extends Entity implements IWalkable
 					player.x = x;
 					player.y = y;
 				}
-				else if (obj.type.equals("town") || obj.type.equals("dungeon"))
+				else if (obj.type.equals("monster"))
 				{
-					String mapFile = "maps/" + obj.type + "s/" + obj.name + ".tmx";
-					scene.add(new Exit(x, y, obj.width, obj.height, mapFile, this));
+					scene.add(new Monster(x, y, this));
 				}
 			}
 		}
 	}
 
-	public List<PathNode> getPath(int x, int y, int gx, int gy)
+	public List<PathNode> getPath(int x, int y, int goalx, int goaly)
 	{
-		return pathFinder.findPath(x / tmx.tileWidth, y / tmx.tileHeight, gx / tmx.tileWidth, gy / tmx.tileHeight);
+		return pathFinder.findPath(
+				x / tmx.tileWidth, y / tmx.tileHeight,
+				goalx / tmx.tileWidth, goaly / tmx.tileHeight
+			);
 	}
 
 	@Override
 	public boolean isWalkable(int x, int y)
 	{
-		return (pathMap.getTile(x, y) > 0);
+		int tile = pathMap.getTile(x, y);
+		return (tile > 0);
 	}
 	
 }
