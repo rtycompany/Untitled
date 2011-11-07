@@ -2,11 +2,17 @@ package com.christiandevs.entities;
 
 import java.util.List;
 
+import com.christiandevs.Stat;
 import com.christiandevs.ai.PathNode;
 import com.flume2d.Entity;
 
-public class Character extends Entity
+public abstract class Character extends Entity
 {
+	
+	protected Stat health;
+	protected int attack;
+	protected int armor;
+	
 	protected World world;
 	
 	private List<PathNode> path;
@@ -21,21 +27,54 @@ public class Character extends Entity
 	{
 		super(x, y);
 		this.world = world;
+		
+		health = new Stat(10);
+		armor = 1;
+		attack = 1;
 	}
 	
+	public void takeDamage(int value)
+	{
+		health.drain(value);
+		if (health.depleted())
+			kill();
+	}
+	
+	public boolean isDead()
+	{
+		return health.depleted();
+	}
+	
+	public void kill()
+	{
+		scene.remove(this);
+	}
+	
+	/**
+	 * Get a path to the destination based on current position
+	 * @param dx the x-axis destination value
+	 * @param dy the y-axis destination value
+	 */
 	protected void getPathTo(int dx, int dy)
 	{
 		path = world.getPath((int) x, (int) y, dx, dy);
-		target = getNextNode();
+		target = getNextPathNode();
 	}
 	
-	private PathNode getNextNode()
+	/**
+	 * Gets the next path node
+	 * @return the next path node
+	 */
+	private PathNode getNextPathNode()
 	{
 		if (path != null && path.size() > 0)
 			return path.remove(0);
 		return null;
 	}
 	
+	/**
+	 * Follows along the given path, if there is one
+	 */
 	protected void followPath()
 	{
 		if (target != null)
@@ -47,7 +86,7 @@ public class Character extends Entity
 			if (x == destX && y == destY)
 			{
 				// we arrived at the target destination, get the next target
-				target = getNextNode();
+				target = getNextPathNode();
 			}
 			else
 			{
