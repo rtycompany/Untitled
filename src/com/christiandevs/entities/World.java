@@ -111,8 +111,8 @@ public class World extends Entity
 				
 				if (obj.type.equals("player"))
 				{
-					player.x = x + 8;
-					player.y = y + 8;
+					player.x = x;
+					player.y = y;
 				}
 				else if (obj.type.equals("town") || obj.type.equals("dungeon"))
 				{

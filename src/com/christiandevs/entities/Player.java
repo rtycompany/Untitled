@@ -1,26 +1,18 @@
 package com.christiandevs.entities;
 
-import java.util.List;
-
-import com.christiandevs.ai.*;
 import com.flume2d.*;
 import com.flume2d.graphics.Spritemap;
 import com.flume2d.masks.AABB;
 import com.flume2d.input.*;
 
-public class Player extends Entity
+public class Player extends Character
 {
 	
 	protected Spritemap sprite;
-	private World world;
-	
-	private List<PathNode> path;
-	private int pathIndex;
 
 	public Player(int type, World world)
 	{
-		super(0, 0);
-		
+		super(world);
 		sprite = new Spritemap("gfx/character.png", 16, 16);
 		type = type * 8;
 		sprite.add("down",  new int[]{ type + 0, type + 1 }, 0.3f);
@@ -34,7 +26,6 @@ public class Player extends Entity
 		
 		this.layer = 5;
 		this.type = "player";
-		this.world = world;
 	}
 	
 	private void processInput()
@@ -44,8 +35,8 @@ public class Player extends Entity
 			Touch touch = Input.touches.get(0);
 			touch.x += scene.camera.x;
 			touch.y += scene.camera.y;
-			path = world.getPath((int) x, (int) y, touch.x, touch.y);
-			pathIndex = 0;
+			getPathTo(touch.x, touch.y);
+			/*
 			if (path == null)
 				System.out.println("No path");
 			else
@@ -55,13 +46,14 @@ public class Player extends Entity
 					System.out.println(node);
 				}
 			}
+			*/
 		}
 	}
 	
 	private void moveCamera()
 	{
-		scene.camera.x = x - Engine.width / 2;
-		scene.camera.y = y - Engine.height / 2;
+		scene.camera.x = x - Engine.width / 2 + sprite.frameWidth / 2;
+		scene.camera.y = y - Engine.height / 2 + sprite.frameHeight / 2;
 		
 		if (scene.camera.x < 0)
 			scene.camera.x = 0;
@@ -72,20 +64,6 @@ public class Player extends Entity
 			scene.camera.y = 0;
 		if (scene.camera.y > world.height - Engine.height)
 			scene.camera.y = world.height - Engine.height;
-	}
-	
-	private void followPath()
-	{
-		if (path != null && pathIndex < path.size())
-		{
-			PathNode n = path.get(pathIndex);
-			if (n != null)
-			{
-				x = n.x * 16 + 8;
-				y = n.y * 16 + 8;
-				pathIndex += 1;
-			}
-		}
 	}
 	
 	public void update()

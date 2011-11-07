@@ -17,6 +17,6 @@ public class Untitled extends Engine
 	
 	public static void main(String[] args)
 	{
-		new JoglApplication(new Untitled(), frameTitle, 800, 600, true);
+		new JoglApplication(new Untitled(), frameTitle, 64, 64, true);
 	}
 }
