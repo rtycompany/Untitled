@@ -25,72 +25,196 @@ import com.flume2d.graphics.Tilemap;
 /*
  * Example.
  */
-public class PathFinder extends AStar<Node>
+public class PathFinder
 {
-	private Tilemap map;
-	private Node goal;
+	
+	private PathNode[][] nodes;
+	private LinkedList<PathNode> open;
+	private LinkedList<PathNode> closed;
+	
+	private static int COST_ORTHOGONAL = 10;
+	private static int COST_DIAGONAL = 14;
+	
+	public boolean allowDiagonal = true;
+	public boolean calculateNearestPoint = false;
 	
 	public PathFinder(Tilemap map)
 	{
-		goal = new Node(0, 0);
-		this.map = map;
+		nodes = new PathNode[map.columns][map.rows];
+		for (int x = 0; x < map.columns; x++)
+			for (int y = 0; y < map.rows; y++)
+				nodes[x][y] = new PathNode(x, y, map.getTile(x, y) > 0);
 	}
 	
-	public void setGoal(int x, int y)
+	public List<PathNode> findPath(int startX, int startY, int destX, int destY)
 	{
-		goal.x = x;
-		goal.y = y;
-	}
-
-	protected boolean isGoal(Node node)
-	{
-		return (node.x == goal.x) && (node.y == goal.y);
-	}
-
-	protected Double g(Node from, Node to)
-	{
-		if(from.x == to.x && from.y == to.y)
-			return 0.0;
-
-		if(testTile(to.x, to.y))
-			return 1.0;
-
-		return Double.MAX_VALUE;
-	}
-
-	protected Double h(Node from, Node to)
-	{
-		/* Use the Manhattan distance heuristic.  */
-		return new Double(Math.abs(goal.x - to.x) + Math.abs(goal.y - to.y));
-	}
-	
-	protected boolean testTile(int x, int y)
-	{
-		if (map.getTile(x, y) > 0)
-			return true;
-		return false;
-	}
-
-	protected List<Node> generateSuccessors(Node node)
-	{
-		List<Node> ret = new LinkedList<Node>();
+		open = new LinkedList<PathNode>();
+		closed = new LinkedList<PathNode>();
 		
+		for (int x = 0; x < nodes.length; x++)
+			for (int y = 0; y < nodes[x].length; y++)
+				nodes[x][y].parent = null;
+		
+		PathNode start = nodes[startX][startY];
+		PathNode dest = nodes[destX][destY];
+		
+		open.push(start);
+		
+		start.g = 0;
+		start.h = heuristic(start, dest);
+		start.f = start.h;
+		
+		while (open.size() > 0)
+		{
+			int f = Integer.MAX_VALUE;
+			PathNode currentNode = null;
+			
+			// choose the node with the lesser f cost
+			Iterator<PathNode> it = open.iterator();
+			while (it.hasNext())
+			{
+				PathNode node = it.next();
+				if (node.f < f)
+				{
+					currentNode = node;
+					f = currentNode.f;
+				}
+			}
+			
+			if (currentNode == dest)
+			{
+				return rebuildPath(currentNode);
+			}
+			
+			open.remove(currentNode);
+			closed.push(currentNode);
+			
+			for (PathNode n : getNeighbors(currentNode))
+			{
+				// skip nodes that have already been closed
+				if (closed.contains(n))
+					continue;
+				
+				int g = currentNode.g + n.cost;
+				if (!open.contains(n))
+				{
+					open.push(n);
+					n.parent = currentNode;
+					n.g = g;
+					n.h = heuristic(n, dest);
+					n.f = n.g + n.h;
+				}
+				else if (g < n.g)
+				{
+					n.parent = currentNode;
+					n.g = g;
+					n.h = heuristic(n, dest);
+					n.f = n.g + n.h;
+				}
+			}
+		}
+		
+		if (calculateNearestPoint)
+		{
+			int min = Integer.MAX_VALUE;
+			PathNode nearestNode = null;
+			
+			for (PathNode c : closed)
+			{
+				int dist = heuristic(c, dest);
+				if (dist < min)
+				{
+					min = dist;
+					nearestNode = c;
+				}
+			}
+			return rebuildPath(nearestNode);
+		}
+		
+		return null;
+	}
+
+	private List<PathNode> rebuildPath(PathNode dest) {
+		LinkedList<PathNode> path = new LinkedList<PathNode>();
+		int dir = 0;
+		
+		int DIR_HORIZ = 1;
+		int DIR_VERT = 2;
+		
+		if (dest == null)
+			return null;
+		
+		PathNode n = dest;
+		while (n.parent != null)
+		{
+			if (n.y == n.parent.y && dir != DIR_VERT)
+			{
+				path.push(n);
+				dir = DIR_VERT;
+			}
+			if (n.x == n.parent.x && dir != DIR_HORIZ)
+			{
+				path.push(n);
+				dir = DIR_HORIZ;
+			}
+			
+			n = n.parent;
+		}
+		
+		return path;
+	}
+
+	private List<PathNode> getNeighbors(PathNode node) {
 		int x = node.x;
 		int y = node.y;
-		
-		if(x < goal.x && testTile(x + 1, y))
-			ret.add(new Node(x + 1, y));
-		
-		if(x > goal.x && testTile(x - 1, y))
-			ret.add(new Node(x - 1, y));
-		
-		if(y < goal.y && testTile(x, y + 1))
-			ret.add(new Node(x, y + 1));
-		
-		if(y > goal.y && testTile(x, y - 1))
-			ret.add(new Node(x, y - 1));
+		PathNode currentNode = null;
+		LinkedList<PathNode> neighbors = new LinkedList<PathNode>();
+		if (x > 0)
+		{
+			currentNode = nodes[x - 1][y];
+			if (currentNode.walkable)
+			{
+				currentNode.cost = COST_ORTHOGONAL;
+				neighbors.push(currentNode);
+			}
+		}
+		if (x < nodes.length - 1)
+		{
+			currentNode = nodes[x + 1][y];
+			if (currentNode.walkable)
+			{
+				currentNode.cost = COST_ORTHOGONAL;
+				neighbors.push(currentNode);
+			}
+		}
+		if (y > 0)
+		{
+			currentNode = nodes[x][y - 1];
+			if (currentNode.walkable)
+			{
+				currentNode.cost = COST_ORTHOGONAL;
+				neighbors.push(currentNode);
+			}
+		}
+		if (y < nodes[0].length - 1)
+		{
+			currentNode = nodes[x][y + 1];
+			if (currentNode.walkable)
+			{
+				currentNode.cost = COST_ORTHOGONAL;
+				neighbors.push(currentNode);
+			}
+		}
+		if (allowDiagonal)
+		{
+			// TODO: add diagonal logic
+		}
+		return neighbors;
+	}
 
-		return ret;
+	private int heuristic(PathNode start, PathNode dest)
+	{
+		return Math.abs(start.x - dest.x) + Math.abs(start.y - dest.y);
 	}
 
 }

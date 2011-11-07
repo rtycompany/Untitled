@@ -2,7 +2,7 @@ package com.christiandevs.entities;
 
 import java.util.List;
 
-import com.christiandevs.ai.Node;
+import com.christiandevs.ai.*;
 import com.flume2d.*;
 import com.flume2d.graphics.Spritemap;
 import com.flume2d.masks.AABB;
@@ -14,7 +14,7 @@ public class Player extends Entity
 	protected Spritemap sprite;
 	private World world;
 	
-	private List<Node> path;
+	private List<PathNode> path;
 	private int pathIndex;
 
 	public Player(int type, World world)
@@ -50,7 +50,7 @@ public class Player extends Entity
 				System.out.println("No path");
 			else
 			{
-				for (Node node : path)
+				for (PathNode node : path)
 				{
 					System.out.println(node);
 				}
@@ -74,14 +74,11 @@ public class Player extends Entity
 			scene.camera.y = world.height - Engine.height;
 	}
 	
-	public void update()
+	private void followPath()
 	{
-		processInput();
-		moveCamera();
-		
 		if (path != null && pathIndex < path.size())
 		{
-			Node n = path.get(pathIndex);
+			PathNode n = path.get(pathIndex);
 			if (n != null)
 			{
 				x = n.x * 16 + 8;
@@ -89,6 +86,13 @@ public class Player extends Entity
 				pathIndex += 1;
 			}
 		}
+	}
+	
+	public void update()
+	{
+		processInput();
+		followPath();
+		moveCamera();
 		super.update();
 	}
 	

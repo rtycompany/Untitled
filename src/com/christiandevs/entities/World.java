@@ -123,10 +123,9 @@ public class World extends Entity
 		}
 	}
 
-	public List<Node> getPath(int x, int y, int gx, int gy)
+	public List<PathNode> getPath(int x, int y, int gx, int gy)
 	{
-		pathFinder.setGoal(gx / tmx.tileWidth, gy / tmx.tileHeight);
-		return pathFinder.compute(new Node(x / tmx.tileWidth, y / tmx.tileHeight));
+		return pathFinder.findPath(x / tmx.tileWidth, y / tmx.tileHeight, gx / tmx.tileWidth, gy / tmx.tileHeight);
 	}
 	
 }
