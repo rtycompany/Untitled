@@ -11,18 +11,23 @@ public class PathNode
 	public int cost;
 	
 	public PathNode parent;
-	public boolean walkable;
+	private int tileID;
 	
 	public PathNode(int x, int y)
 	{
-		this(x, y, true);
+		this(x, y, -1);
 	}
 	
-	public PathNode(int x, int y, boolean walkable)
+	public PathNode(int x, int y, int tileID)
 	{
 		this.x = x;
 		this.y = y;
-		this.walkable = walkable;
+		this.tileID = tileID;
+	}
+	
+	public boolean isWalkable()
+	{
+		return (tileID > 0);
 	}
 	
 	public String toString()
