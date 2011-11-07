@@ -3,8 +3,8 @@ package com.christiandevs.entities;
 import java.util.List;
 
 import com.christiandevs.Stat;
-import com.christiandevs.ai.PathNode;
 import com.flume2d.Entity;
+import com.flume2d.ai.PathNode;
 
 public abstract class Character extends Entity
 {

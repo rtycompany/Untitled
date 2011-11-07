@@ -3,12 +3,12 @@ package com.christiandevs.entities;
 import java.util.*;
 
 import com.flume2d.*;
+import com.flume2d.ai.*;
 import com.flume2d.graphics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.tiled.*;
-import com.christiandevs.ai.*;
 
-public class World extends Entity
+public class World extends Entity implements IWalkable
 {
 	
 	private Player player;
@@ -42,11 +42,10 @@ public class World extends Entity
 		height = tmx.height * tmx.tileHeight;
 		
 		pathMap = new Tilemap(null, tmx.tileWidth, tmx.tileHeight, tmx.width, tmx.height);
+		pathFinder = new PathFinder(tmx.width, tmx.height, this);
 		
 		loadMap(tmx);
 		loadObjects(tmx);
-		
-		pathFinder = new PathFinder(pathMap);
 	}
 	
 	private void loadMap(TiledMap tmx)
@@ -73,8 +72,7 @@ public class World extends Entity
 				{
 					tile = layer.tiles[y][x] - set.firstgid;
 					map.setTile(x, y, tile);
-					if (tile > -1)
-						pathMap.setTile(x, y, tile);
+					pathMap.setTile(x, y, tile);
 				}
 			}
 			list.add(map);
@@ -126,6 +124,12 @@ public class World extends Entity
 	public List<PathNode> getPath(int x, int y, int gx, int gy)
 	{
 		return pathFinder.findPath(x / tmx.tileWidth, y / tmx.tileHeight, gx / tmx.tileWidth, gy / tmx.tileHeight);
+	}
+
+	@Override
+	public boolean isWalkable(int x, int y)
+	{
+		return (pathMap.getTile(x, y) > 0);
 	}
 	
 }
