@@ -72,7 +72,8 @@ public class World extends Entity implements IWalkable
 				{
 					tile = layer.tiles[y][x] - set.firstgid;
 					map.setTile(x, y, tile);
-					pathMap.setTile(x, y, tile);
+					if (tile > -1)
+						pathMap.setTile(x, y, tile);
 				}
 			}
 			list.add(map);
