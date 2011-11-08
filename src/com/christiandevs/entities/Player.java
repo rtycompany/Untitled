@@ -8,9 +8,8 @@ import com.flume2d.input.*;
 public class Player extends Character
 {
 
-	public Player(int type, World world)
+	public Player(int type)
 	{
-		super(world);
 		sprite = new Spritemap("gfx/character.png", 16, 16);
 		type = type * 8;
 		sprite.add("down",  new int[]{ type + 0, type + 1 }, 0.3f);
@@ -33,7 +32,8 @@ public class Player extends Character
 			Touch touch = Input.touches.get(0);
 			touch.x += scene.camera.x;
 			touch.y += scene.camera.y;
-			getPathTo(touch.x, touch.y);
+			if (canMoveTo(touch.x, touch.y))
+				getPathTo(touch.x, touch.y);
 			/*
 			if (path == null)
 				System.out.println("No path");
@@ -53,15 +53,18 @@ public class Player extends Character
 		scene.camera.x = x - Engine.width / 2 + sprite.frameWidth / 2;
 		scene.camera.y = y - Engine.height / 2 + sprite.frameHeight / 2;
 		
-		if (scene.camera.x < 0)
-			scene.camera.x = 0;
-		if (scene.camera.x > world.width - Engine.width)
-			scene.camera.x = world.width - Engine.width;
-		
-		if (scene.camera.y < 0)
-			scene.camera.y = 0;
-		if (scene.camera.y > world.height - Engine.height)
-			scene.camera.y = world.height - Engine.height;
+		if (map != null)
+		{
+			if (scene.camera.x < 0)
+				scene.camera.x = 0;
+			if (scene.camera.x > map.width - Engine.width)
+				scene.camera.x = map.width - Engine.width;
+			
+			if (scene.camera.y < 0)
+				scene.camera.y = 0;
+			if (scene.camera.y > map.height - Engine.height)
+				scene.camera.y = map.height - Engine.height;
+		}
 	}
 	
 	@Override

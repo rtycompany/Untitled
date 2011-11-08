@@ -8,38 +8,37 @@ import com.flume2d.graphics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.tiled.*;
 
-public class World extends Entity implements IWalkable
+public class Map extends Entity implements IWalkable
 {
 	
 	private Player player;
 	private GraphicList list;
 	private PathFinder pathFinder;
 	private Tilemap pathMap;
-	private TiledMap tmx;
 	
+	public int tileWidth, tileHeight;
 	public int width, height;
 
-	public World()
+	public Map()
 	{
-		super();
-		
 		list = new GraphicList();
+		player = new Player(0);
 	}
 	
 	public void added()
 	{
-		player = new Player(0, this);
 		scene.add(player);
-		load("maps/world.tmx");
 	}
 	
 	public void load(String filename)
 	{
-		tmx = TiledLoader.createMap(Gdx.files.internal(filename));
+		TiledMap tmx = TiledLoader.createMap(Gdx.files.internal(filename));
 		if (tmx == null) return;
 		
 		width = tmx.width * tmx.tileWidth;
 		height = tmx.height * tmx.tileHeight;
+		tileWidth = tmx.tileWidth;
+		tileHeight = tmx.tileHeight;
 		
 		pathMap = new Tilemap(null, tmx.tileWidth, tmx.tileHeight, tmx.width, tmx.height);
 		pathFinder = new PathFinder(tmx.width, tmx.height, this);
@@ -105,18 +104,21 @@ public class World extends Entity implements IWalkable
 			{
 				TiledObject obj = it.next();
 				
-				int x = obj.x;
-				int y = obj.y;
-				
+				MapEntity e = null;
 				if (obj.type.equals("player"))
 				{
-					player.x = x;
-					player.y = y;
+					player.x = obj.x;
+					player.y = obj.y;
+					e = player;
 				}
 				else if (obj.type.equals("monster"))
 				{
-					scene.add(new Monster(x, y, this));
+					e = new Monster(obj.x, obj.y);
+					scene.add(e);
 				}
+				
+				if (e != null)
+					e.setMap(this);
 			}
 		}
 	}
@@ -125,8 +127,8 @@ public class World extends Entity implements IWalkable
 	{
 		pathFinder.calculateNearestPoint = true; 
 		return pathFinder.findPath(
-				x / tmx.tileWidth, y / tmx.tileHeight,
-				goalx / tmx.tileWidth, goaly / tmx.tileHeight
+				x / tileWidth, y / tileHeight,
+				goalx / tileWidth, goaly / tileHeight
 			);
 	}
 
@@ -135,6 +137,7 @@ public class World extends Entity implements IWalkable
 	{
 		int tile = pathMap.getTile(x, y);
 		
+		// check which tiles are "solid"
 		if (tile < 1 || tile == 3 ||
 			(tile > 7 && tile < 14) ||
 			(tile > 15 && tile < 19) ||

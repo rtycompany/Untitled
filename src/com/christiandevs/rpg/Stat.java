@@ -1,4 +1,4 @@
-package com.christiandevs;
+package com.christiandevs.rpg;
 
 public class Stat
 {

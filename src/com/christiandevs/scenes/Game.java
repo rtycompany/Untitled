@@ -5,11 +5,12 @@ import com.christiandevs.entities.*;
 
 public class Game extends Scene
 {
-	private World world;
+	private Map map;
 	
 	public Game()
 	{
-		world = new World();
-		add(world);
+		map = new Map();
+		map.load("maps/world.tmx");
+		add(map);
 	}
 }

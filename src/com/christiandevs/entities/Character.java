@@ -1,40 +1,42 @@
 package com.christiandevs.entities;
 
-import java.util.List;
+import java.util.*;
 
-import com.christiandevs.Stat;
-import com.flume2d.Entity;
+import com.christiandevs.rpg.Stat;
 import com.flume2d.ai.PathNode;
 import com.flume2d.graphics.Spritemap;
 
-public abstract class Character extends Entity
+public abstract class Character extends MapEntity
 {
 	
+	public String name;
+	
+	protected String classType;
 	protected Stat health;
 	protected int attack;
 	protected int armor;
 	protected int level;
+	protected int moveSpaces;
 	
-	protected World world;
 	protected Spritemap sprite;
 	
 	private List<PathNode> path;
 	private PathNode target;
 	
-	public Character(World world)
+	public Character()
 	{
-		this(0, 0, world);
+		this(0, 0);
 	}
 	
-	public Character(int x, int y, World world)
+	public Character(int x, int y)
 	{
 		super(x, y);
-		this.world = world;
 		
 		health = new Stat(50);
 		armor = 1;
 		attack = 1;
 		level = 1;
+		moveSpaces = 3;
 	}
 	
 	public void levelUp()
@@ -61,6 +63,43 @@ public abstract class Character extends Entity
 		scene.remove(this);
 	}
 	
+	protected boolean canMoveTo(int dx, int dy)
+	{
+		LinkedList<PathNode> nodes = new LinkedList<PathNode>();
+		getWalkableArea(nodes, (int) x / map.tileWidth, (int) y / map.tileHeight, moveSpaces);
+		return pathContains(nodes, dx / map.tileWidth, dy / map.tileHeight);
+	}
+	
+	private boolean pathContains(List<PathNode> nodes, int x, int y)
+	{
+		Iterator<PathNode> it = nodes.iterator();
+		while (it.hasNext())
+		{
+			PathNode node = it.next();
+			if (node.x == x && node.y == y)
+				return true;
+		}
+		return false;
+	}
+	
+	protected void getWalkableArea(List<PathNode> nodes, int x, int y, int spaces)
+	{
+		if (spaces <= 0) return;
+		
+		int[] xvals = new int[]{x - 1, x + 1, x,     x    };
+		int[] yvals = new int[]{y,     y,     y - 1, y + 1};
+		
+		for (int i = 0; i < xvals.length; i++)
+		{
+			x = xvals[i]; y = yvals[i];
+			if (map.isWalkable(x, y) && !pathContains(nodes, x, y))
+			{
+				nodes.add(new PathNode(x, y));
+				getWalkableArea(nodes, x, y, spaces - 1);
+			}
+		}
+	}
+	
 	/**
 	 * Get a path to the destination based on current position
 	 * @param dx the x-axis destination value
@@ -68,7 +107,7 @@ public abstract class Character extends Entity
 	 */
 	protected void getPathTo(int dx, int dy)
 	{
-		path = world.getPath((int) x, (int) y, dx, dy);
+		path = map.getPath((int) x, (int) y, dx, dy);
 		target = getNextPathNode();
 	}
 	
@@ -90,10 +129,9 @@ public abstract class Character extends Entity
 	{
 		if (target != null)
 		{
-			// TODO: remove 16 in place of tile width/height values
-			int destX = target.x * 16;
-			int destY = target.y * 16;
-			int moveSpeed = 16 / 8;
+			int destX = target.x * map.tileWidth;
+			int destY = target.y * map.tileHeight;
+			int moveSpeed = 2;
 			if (x == destX && y == destY)
 			{
 				// we arrived at the target destination, get the next target

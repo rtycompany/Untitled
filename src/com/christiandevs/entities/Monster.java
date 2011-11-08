@@ -10,9 +10,9 @@ public class Monster extends Character
 	private Spritemap sprite;
 	private float moveTime;
 
-	public Monster(int x, int y, World world)
+	public Monster(int x, int y)
 	{
-		super(x, y, world);
+		super(x, y);
 		
 		sprite = new Spritemap("gfx/monster.png", 16, 16);
 		int type = 0;
