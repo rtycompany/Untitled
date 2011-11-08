@@ -7,8 +7,6 @@ import com.flume2d.input.*;
 
 public class Player extends Character
 {
-	
-	protected Spritemap sprite;
 
 	public Player(int type, World world)
 	{

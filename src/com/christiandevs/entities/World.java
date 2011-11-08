@@ -123,6 +123,7 @@ public class World extends Entity implements IWalkable
 
 	public List<PathNode> getPath(int x, int y, int goalx, int goaly)
 	{
+		pathFinder.calculateNearestPoint = true; 
 		return pathFinder.findPath(
 				x / tmx.tileWidth, y / tmx.tileHeight,
 				goalx / tmx.tileWidth, goaly / tmx.tileHeight
@@ -133,7 +134,13 @@ public class World extends Entity implements IWalkable
 	public boolean isWalkable(int x, int y)
 	{
 		int tile = pathMap.getTile(x, y);
-		return (tile > 0);
+		
+		if (tile < 1 || tile == 3 ||
+			(tile > 7 && tile < 14) ||
+			(tile > 15 && tile < 19) ||
+			(tile > 23 && tile < 28))
+			return false;
+		return true;
 	}
 	
 }
