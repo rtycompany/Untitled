@@ -1,6 +1,5 @@
 package com.christiandevs.entities;
 
-import com.flume2d.Entity;
 import com.flume2d.masks.AABB;
 
 public class Exit extends MapEntity
