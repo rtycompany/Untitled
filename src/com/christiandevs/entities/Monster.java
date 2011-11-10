@@ -1,6 +1,6 @@
 package com.christiandevs.entities;
 
-import com.flume2d.Engine;
+import com.flume2d.Entity;
 import com.flume2d.graphics.Spritemap;
 import com.flume2d.masks.AABB;
 
@@ -8,8 +8,8 @@ public class Monster extends Character
 {
 	
 	private Spritemap sprite;
-	private float moveTime;
-
+	private Entity target;
+	
 	public Monster(int x, int y)
 	{
 		super(x, y);
@@ -28,18 +28,24 @@ public class Monster extends Character
 		this.type = "monster";
 	}
 	
-	private void move()
-	{
-		x += (int) Math.floor(Math.random() * 2 - 1);
-		y += (int) Math.floor(Math.random() * 2 - 1);
-	}
-	
-	@Override
 	public void update()
 	{
-		moveTime -= Engine.elapsed;
-		if (moveTime < 0)
-			move();
+		if (state == PlayState.TakeTurn)
+		{
+			// we need to find a target and move towards it
+			if (target == null)
+			{
+				target = scene.findClosest("player", x, y);
+				getPathTo((int) target.x, (int) target.y);
+			}
+			
+			if (!followPath())
+			{
+				// we finished following the path
+				state = PlayState.Wait;
+				target = null;
+			}
+		}
 		super.update();
 	}
 	

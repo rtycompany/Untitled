@@ -3,11 +3,18 @@ package com.christiandevs.entities;
 import java.util.*;
 
 import com.christiandevs.rpg.Stat;
+import com.flume2d.Engine;
 import com.flume2d.ai.PathNode;
 import com.flume2d.graphics.Spritemap;
 
 public abstract class Character extends MapEntity
 {
+	
+	protected enum PlayState
+	{
+		Wait,
+		TakeTurn
+	}
 	
 	public String name;
 	
@@ -23,6 +30,8 @@ public abstract class Character extends MapEntity
 	private List<PathNode> path;
 	private PathNode target;
 	
+	protected PlayState state;
+	
 	public Character()
 	{
 		this(0, 0);
@@ -31,6 +40,8 @@ public abstract class Character extends MapEntity
 	public Character(int x, int y)
 	{
 		super(x, y);
+		
+		state = PlayState.Wait;
 		
 		health = new Stat(50);
 		armor = 1;
@@ -61,6 +72,23 @@ public abstract class Character extends MapEntity
 	public void kill()
 	{
 		scene.remove(this);
+	}
+	
+	public void canTakeTurn()
+	{
+		state = PlayState.TakeTurn;
+	}
+	
+	public boolean isTakingTurn()
+	{
+		return (state == PlayState.TakeTurn);
+	}
+	
+	public void focusCamera()
+	{
+		// TODO: ease the transition instead of snapping
+		scene.camera.x = x - Engine.width / 2 + sprite.frameWidth / 2;
+		scene.camera.y = y - Engine.height / 2 + sprite.frameHeight / 2;
 	}
 	
 	protected boolean canMoveTo(int dx, int dy)
@@ -124,44 +152,46 @@ public abstract class Character extends MapEntity
 	
 	/**
 	 * Follows along the given path, if there is one
+	 * @return still following the path?
 	 */
-	protected void followPath()
+	protected boolean followPath()
 	{
-		if (target != null)
+		if (target == null)
+			return false;
+		
+		int destX = target.x * map.tileWidth;
+		int destY = target.y * map.tileHeight;
+		int moveSpeed = 2;
+		if (x == destX && y == destY)
 		{
-			int destX = target.x * map.tileWidth;
-			int destY = target.y * map.tileHeight;
-			int moveSpeed = 2;
-			if (x == destX && y == destY)
+			// we arrived at the target destination, get the next target
+			target = getNextPathNode();
+		}
+		else
+		{
+			if (x < destX)
 			{
-				// we arrived at the target destination, get the next target
-				target = getNextPathNode();
+				x += moveSpeed;
+				sprite.play("right");
 			}
-			else
+			else if (x > destX)
 			{
-				if (x < destX)
-				{
-					x += moveSpeed;
-					sprite.play("right");
-				}
-				else if (x > destX)
-				{
-					x -= moveSpeed;
-					sprite.play("left");
-				}
-				
-				if (y < destY)
-				{
-					y += moveSpeed;
-					sprite.play("down");
-				}
-				else if (y > destY)
-				{
-					y -= moveSpeed;
-					sprite.play("up");
-				}
+				x -= moveSpeed;
+				sprite.play("left");
+			}
+			
+			if (y < destY)
+			{
+				y += moveSpeed;
+				sprite.play("down");
+			}
+			else if (y > destY)
+			{
+				y -= moveSpeed;
+				sprite.play("up");
 			}
 		}
+		return true;
 	}
 
 }

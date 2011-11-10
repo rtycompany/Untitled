@@ -17,32 +17,6 @@
   </data>
  </layer>
  <objectgroup name="objects" width="128" height="128">
-  <object name="Itas" type="town" x="1456" y="560" width="16" height="16"/>
-  <object name="S1" type="spire" x="880" y="352" width="16" height="32"/>
-  <object name="Gabria" type="town" x="352" y="624" width="32" height="16"/>
-  <object name="Gabria" type="town" x="368" y="640" width="32" height="16"/>
-  <object name="Dolan" type="town" x="208" y="304" width="32" height="16"/>
-  <object name="Dolan" type="town" x="224" y="320" width="16" height="16"/>
-  <object name="S6" type="spire" x="912" y="656" width="16" height="32"/>
-  <object name="S2" type="spire" x="1728" y="96" width="16" height="32"/>
-  <object name="S4" type="spire" x="1888" y="1680" width="16" height="32"/>
-  <object name="S3" type="spire" x="1408" y="1312" width="16" height="32"/>
-  <object name="S5" type="spire" x="272" y="1712" width="16" height="32"/>
-  <object name="S7" type="spire" x="240" y="1184" width="16" height="32"/>
-  <object name="Elysiar" type="town" x="1728" y="416" width="16" height="32"/>
-  <object name="Elysiar" type="town" x="1760" y="416" width="16" height="32"/>
-  <object name="Anglion" type="town" x="1792" y="1120" width="32" height="32"/>
-  <object name="Malos" type="town" x="1408" y="1792" width="32" height="32"/>
-  <object name="Malos" type="town" x="1392" y="1792" width="16" height="16"/>
-  <object name="Thardova" type="town" x="912" y="1680" width="32" height="32"/>
-  <object name="Liberti" type="town" x="576" y="1376" width="16" height="16"/>
-  <object name="Liberti" type="town" x="592" y="1392" width="16" height="16"/>
-  <object name="Zael" type="town" x="896" y="528" width="16" height="16"/>
-  <object name="D3" type="dungeon" x="1984" y="736" width="16" height="16"/>
-  <object name="D1" type="dungeon" x="608" y="464" width="16" height="16"/>
-  <object name="D2" type="dungeon" x="1136" y="1056" width="16" height="16"/>
-  <object name="D5" type="dungeon" x="608" y="1824" width="16" height="16"/>
-  <object name="D4" type="dungeon" x="720" y="1216" width="16" height="16"/>
-  <object name="Player" type="player" x="384" y="672" width="16" height="16"/>
+  <object name="Player" type="spawn" x="384" y="672" width="16" height="16"/>
  </objectgroup>
 </map>

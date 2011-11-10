@@ -11,10 +11,11 @@ import com.badlogic.gdx.graphics.g2d.tiled.*;
 public class Map extends Entity implements IWalkable
 {
 	
-	private Player player;
 	private GraphicList list;
 	private PathFinder pathFinder;
 	private Tilemap pathMap;
+	
+	public List<Character> characters;
 	
 	public int tileWidth, tileHeight;
 	public int width, height;
@@ -22,12 +23,7 @@ public class Map extends Entity implements IWalkable
 	public Map()
 	{
 		list = new GraphicList();
-		player = new Player(0);
-	}
-	
-	public void added()
-	{
-		scene.add(player);
+		characters = new LinkedList<Character>();
 	}
 	
 	public void load(String filename)
@@ -104,21 +100,13 @@ public class Map extends Entity implements IWalkable
 			{
 				TiledObject obj = it.next();
 				
-				MapEntity e = null;
-				if (obj.type.equals("player"))
+				if (obj.type.equals("spawn"))
 				{
-					player.x = obj.x;
-					player.y = obj.y;
-					e = player;
-				}
-				else if (obj.type.equals("monster"))
-				{
-					e = new Monster(obj.x, obj.y);
+					Character e = new Player(obj.x, obj.y, 0);
+					characters.add(e);
 					scene.add(e);
-				}
-				
-				if (e != null)
 					e.setMap(this);
+				}
 			}
 		}
 	}
