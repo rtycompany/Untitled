@@ -28,6 +28,7 @@ public class Battle extends Scene
 			turns.offer(it.next());
 		}
 		getNextCharacter();
+		character.focusCamera(true);
 	}
 	
 	/**

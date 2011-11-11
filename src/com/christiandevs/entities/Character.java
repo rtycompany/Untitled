@@ -96,11 +96,37 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 		return (state == PlayState.Wait);
 	}
 	
+	private float ease(float start, float target)
+	{
+		if (Math.abs(target - start) < 4)
+			return target;
+		
+		if (target < start)
+			return start - 2;
+		
+		return start + 2;
+	}
+	
 	public void focusCamera()
 	{
-		// TODO: ease the transition instead of snapping
-		scene.camera.x = x - Engine.width / 2 + sprite.frameWidth / 2;
-		scene.camera.y = y - Engine.height / 2 + sprite.frameHeight / 2;
+		focusCamera(false);
+	}
+	
+	public void focusCamera(boolean snap)
+	{
+		// TODO: use a tween instead of this hacked method
+		float targetX = x - Engine.width / 2 + sprite.frameWidth / 2;
+		float targetY = y - Engine.height / 2 + sprite.frameHeight / 2;
+		if (snap)
+		{
+			scene.camera.x = targetX;
+			scene.camera.y = targetY;
+		}
+		else
+		{
+			scene.camera.x = ease(scene.camera.x, targetX);
+			scene.camera.y = ease(scene.camera.y, targetY);
+		}
 	}
 	
 	protected boolean canMoveTo(int dx, int dy)
