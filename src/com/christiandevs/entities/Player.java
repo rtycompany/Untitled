@@ -25,38 +25,51 @@ public class Player extends Character
 		this.type = "player";
 	}
 	
-	private void processInput()
-	{
-		if (Input.check(Key.SPACE))
-		{
-			// skip turn
-			state = PlayState.Wait;
-		}
-		if (Input.touched)
-		{
-			Touch touch = Input.touches.get(0);
-			touch.x += scene.camera.x;
-			touch.y += scene.camera.y;
-			if (canMoveTo(touch.x, touch.y))
-			{
-				getPathTo(touch.x, touch.y);
-				state = PlayState.Moving;
-			}
-		}
-	}
-	
 	@Override
 	public void update()
 	{
 		switch (state)
 		{
-			case TakeTurn:
-				processInput();
+			case StartTurn:
+				if (Input.check(Key.SPACE))
+				{
+					state = PlayState.Attack;
+				}
+				if (Input.touched)
+				{
+					Touch touch = Input.touches.get(0);
+					touch.x += scene.camera.x;
+					touch.y += scene.camera.y;
+					//if (canMoveTo(touch.x, touch.y))
+					{
+						getPathTo(touch.x, touch.y);
+						state = PlayState.Move;
+					}
+				}
 				break;
-			case Moving:
+			case Move:
 				if (!followPath())
 				{
+					// we took our turn
+					state = PlayState.Attack;
+				}
+				break;
+			case Attack:
+				if (Input.check(Key.SPACE))
+				{
 					state = PlayState.Wait;
+				}
+				if (Input.touched)
+				{
+					Touch touch = Input.touches.get(0);
+					touch.x += scene.camera.x;
+					touch.y += scene.camera.y;
+					Character enemy = attack(touch.x, touch.y);
+					if (enemy != null)
+					{
+						enemy.takeDamage(attack);
+						state = PlayState.Wait;
+					}
 				}
 				break;
 		}

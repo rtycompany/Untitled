@@ -1,6 +1,7 @@
 package com.christiandevs.scenes;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import com.christiandevs.entities.Map;
 import com.christiandevs.entities.Character;
@@ -12,7 +13,7 @@ public class Battle extends Scene
 	
 	private Map map;
 	private Character character;
-	private PriorityQueue<Character> turns;
+	private Queue<Character> turnQueue;
 
 	public Battle()
 	{
@@ -22,13 +23,14 @@ public class Battle extends Scene
 		
 		// Initialize character turn order
 		Iterator<Character> it = map.characters.iterator();
-		turns = new PriorityQueue<Character>();
+		// TODO: look into making this a DelayedQueue for turn times
+		turnQueue = new LinkedBlockingQueue<Character>();
 		while (it.hasNext())
 		{
-			turns.offer(it.next());
+			turnQueue.offer(it.next());
 		}
 		getNextCharacter();
-		character.focusCamera(true);
+		character.focusCamera(false);
 	}
 	
 	/**
@@ -53,8 +55,8 @@ public class Battle extends Scene
 	private void getNextCharacter()
 	{
 		// priority queue orders the characters by their speed
-		character = turns.remove();
-		character.canTakeTurn();
+		character = turnQueue.remove();
+		character.startTurn();
 	}
 	
 	@Override
@@ -63,13 +65,13 @@ public class Battle extends Scene
 		// Check if the character is done with their turn
 		if (character.isWaiting())
 		{
-			// add the character back into turn order
-			turns.offer(character);
+			// add the character back onto the queue
+			turnQueue.offer(character);
 			getNextCharacter();
 		}
 		
-		// adjust camera to the character playing
-		character.focusCamera();
+		// smooth adjust camera to the character playing
+		character.focusCamera(true);
 		clampCameraToBounds();
 		
 		super.update();

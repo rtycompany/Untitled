@@ -12,4 +12,14 @@ public class Party
 		members = new LinkedList<Character>();
 	}
 	
+	public void save()
+	{
+		
+	}
+	
+	public void load()
+	{
+		
+	}
+	
 }

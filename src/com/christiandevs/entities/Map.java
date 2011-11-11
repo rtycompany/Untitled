@@ -95,6 +95,7 @@ public class Map extends Entity implements IWalkable
 		while (groups.hasNext())
 		{
 			TiledObjectGroup group = groups.next();
+			
 			Iterator<TiledObject> it = group.objects.iterator();
 			while (it.hasNext())
 			{
@@ -102,10 +103,14 @@ public class Map extends Entity implements IWalkable
 				
 				if (obj.type.equals("spawn"))
 				{
-					Character e = new Player(obj.x, obj.y, 0);
-					characters.add(e);
-					scene.add(e);
-					e.setMap(this);
+					Character c = null;
+					if (group.name.equals("monster"))
+						c = new Monster(obj.x, obj.y);
+					else
+						c = new Player(obj.x, obj.y, 0);
+					characters.add(c);
+					scene.add(c);
+					c.setMap(this);
 				}
 			}
 		}
@@ -124,14 +129,31 @@ public class Map extends Entity implements IWalkable
 	public boolean isWalkable(int x, int y)
 	{
 		int tile = pathMap.getTile(x, y);
+		boolean canWalk = true;
 		
 		// check which tiles are "solid"
 		if (tile < 1 || tile == 3 ||
 			(tile > 7 && tile < 14) ||
 			(tile > 15 && tile < 19) ||
 			(tile > 23 && tile < 28))
-			return false;
-		return true;
+			canWalk = false;
+		
+		// make the characters "solid"
+		if (canWalk)
+		{
+			Iterator<Character> it = characters.iterator();
+			while (it.hasNext())
+			{
+				Character c = it.next();
+				if (x == (c.x / tileWidth) && y == (c.y / tileHeight))
+				{
+					canWalk = false;
+					break;
+				}
+			}
+		}
+		
+		return canWalk;
 	}
 	
 }

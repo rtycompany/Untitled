@@ -7,15 +7,14 @@ import com.flume2d.masks.AABB;
 public class Monster extends Character
 {
 	
-	private Spritemap sprite;
 	private Entity target;
 	
 	public Monster(int x, int y)
 	{
 		super(x, y);
 		
-		sprite = new Spritemap("gfx/monster.png", 16, 16);
-		int type = 0;
+		sprite = new Spritemap("gfx/character.png", 16, 16);
+		int type = 8;
 		sprite.add("down",  new int[]{ type + 0, type + 1 }, 0.3f);
 		sprite.add("left",  new int[]{ type + 2, type + 3 }, 0.3f);
 		sprite.add("up",    new int[]{ type + 4, type + 5 }, 0.3f);
@@ -30,7 +29,7 @@ public class Monster extends Character
 	
 	public void update()
 	{
-		if (state == PlayState.TakeTurn)
+		if (state == PlayState.StartTurn)
 		{
 			// we need to find a target and move towards it
 			if (target == null)

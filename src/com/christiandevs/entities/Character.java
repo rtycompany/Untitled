@@ -1,27 +1,26 @@
 package com.christiandevs.entities;
 
 import java.util.*;
-
 import com.christiandevs.rpg.Stat;
 import com.flume2d.Engine;
 import com.flume2d.ai.PathNode;
 import com.flume2d.graphics.Spritemap;
 
-public abstract class Character extends MapEntity implements Comparable<Character>
+public abstract class Character extends MapEntity
 {
 	
 	protected enum PlayState
 	{
 		Wait,
-		TakeTurn,
-		Moving
+		StartTurn,
+		Move,
+		Attack
 	}
 	
 	public String name;
 	
 	protected String classType;
 	protected Stat health;
-	protected int speed;
 	protected int attack;
 	protected int armor;
 	protected int level;
@@ -29,8 +28,8 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 	
 	protected Spritemap sprite;
 	
-	private List<PathNode> path;
-	private PathNode target;
+	private List<PathNode> pathNodes;
+	private PathNode pathTarget;
 	
 	protected PlayState state;
 	
@@ -50,16 +49,6 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 		attack = 1;
 		level = 1;
 		moveSpaces = 3;
-	}
-	
-	@Override
-	public int compareTo(Character c)
-	{
-		if (c.speed > speed)
-			return -1;
-		if (c.speed < speed)
-			return 1;
-		return 0;
 	}
 	
 	public void levelUp()
@@ -86,9 +75,9 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 		scene.remove(this);
 	}
 	
-	public void canTakeTurn()
+	public void startTurn()
 	{
-		state = PlayState.TakeTurn;
+		state = PlayState.StartTurn;
 	}
 	
 	public boolean isWaiting()
@@ -107,26 +96,26 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 		return start + 2;
 	}
 	
-	public void focusCamera()
+	public void focusCamera(boolean smooth)
 	{
-		focusCamera(false);
-	}
-	
-	public void focusCamera(boolean snap)
-	{
-		// TODO: use a tween instead of this hacked method
 		float targetX = x - Engine.width / 2 + sprite.frameWidth / 2;
 		float targetY = y - Engine.height / 2 + sprite.frameHeight / 2;
-		if (snap)
+		if (smooth)
+		{
+			// TODO: use a tween or something instead of this hacked method
+			scene.camera.x = ease(scene.camera.x, targetX);
+			scene.camera.y = ease(scene.camera.y, targetY);
+		}
+		else
 		{
 			scene.camera.x = targetX;
 			scene.camera.y = targetY;
 		}
-		else
-		{
-			scene.camera.x = ease(scene.camera.x, targetX);
-			scene.camera.y = ease(scene.camera.y, targetY);
-		}
+	}
+	
+	protected Character attack(int dx, int dy)
+	{
+		return null;
 	}
 	
 	protected boolean canMoveTo(int dx, int dy)
@@ -173,8 +162,8 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 	 */
 	protected void getPathTo(int dx, int dy)
 	{
-		path = map.getPath((int) x, (int) y, dx, dy);
-		target = getNextPathNode();
+		pathNodes = map.getPath((int) x, (int) y, dx, dy);
+		pathTarget = getNextPathNode();
 	}
 	
 	/**
@@ -183,8 +172,8 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 	 */
 	private PathNode getNextPathNode()
 	{
-		if (path != null && path.size() > 0)
-			return path.remove(0);
+		if (pathNodes != null && pathNodes.size() > 0)
+			return pathNodes.remove(0);
 		return null;
 	}
 	
@@ -194,16 +183,16 @@ public abstract class Character extends MapEntity implements Comparable<Characte
 	 */
 	protected boolean followPath()
 	{
-		if (target == null)
+		if (pathTarget == null)
 			return false;
 		
-		int destX = target.x * map.tileWidth;
-		int destY = target.y * map.tileHeight;
+		int destX = pathTarget.x * map.tileWidth;
+		int destY = pathTarget.y * map.tileHeight;
 		int moveSpeed = 2;
 		if (x == destX && y == destY)
 		{
 			// we arrived at the target destination, get the next target
-			target = getNextPathNode();
+			pathTarget = getNextPathNode();
 		}
 		else
 		{
