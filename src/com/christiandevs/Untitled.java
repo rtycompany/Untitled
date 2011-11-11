@@ -1,6 +1,6 @@
 package com.christiandevs;
 
-import com.badlogic.gdx.backends.jogl.JoglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.christiandevs.scenes.*;
 import com.flume2d.Engine;
 
@@ -17,6 +17,6 @@ public class Untitled extends Engine
 	
 	public static void main(String[] args)
 	{
-		new JoglApplication(new Untitled(), frameTitle, 64, 64, true);
+		new LwjglApplication(new Untitled(), frameTitle, 64, 64, true);
 	}
 }

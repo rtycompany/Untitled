@@ -4,9 +4,9 @@
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Flume2D"/>
-	<classpathentry kind="lib" path="/Flume2D/lib/gdx-backend-jogl-natives.jar"/>
-	<classpathentry kind="lib" path="/Flume2D/lib/gdx-backend-jogl.jar"/>
 	<classpathentry kind="lib" path="/Flume2D/lib/gdx-natives.jar"/>
 	<classpathentry kind="lib" path="/Flume2D/lib/gdx.jar"/>
+	<classpathentry kind="lib" path="/Flume2D/lib/gdx-backend-lwjgl-natives.jar"/>
+	<classpathentry kind="lib" path="/Flume2D/lib/gdx-backend-lwjgl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
