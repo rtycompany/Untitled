@@ -3,10 +3,11 @@ package com.christiandevs.entities;
 import java.util.*;
 import com.christiandevs.rpg.Stat;
 import com.flume2d.Engine;
+import com.flume2d.Entity;
 import com.flume2d.ai.PathNode;
 import com.flume2d.graphics.Spritemap;
 
-public abstract class Character extends MapEntity
+public abstract class Character extends Entity
 {
 	
 	protected enum PlayState
@@ -27,6 +28,7 @@ public abstract class Character extends MapEntity
 	protected int moveSpaces;
 	
 	protected Spritemap sprite;
+	protected Map map;
 	
 	private List<PathNode> pathNodes;
 	private PathNode pathTarget;
@@ -116,6 +118,11 @@ public abstract class Character extends MapEntity
 	protected Character attack(int dx, int dy)
 	{
 		return null;
+	}
+	
+	public void setMap(Map map)
+	{
+		this.map = map;
 	}
 	
 	protected boolean canMoveTo(int dx, int dy)
