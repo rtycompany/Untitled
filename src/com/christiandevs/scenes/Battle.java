@@ -19,7 +19,7 @@ public class Battle extends Scene
 	{
 		map = new Map();
 		add(map);
-		map.load("maps/world.tmx");
+		map.load("data/maps/world.tmx");
 		
 		// Initialize character turn order
 		Iterator<Character> it = map.characters.iterator();

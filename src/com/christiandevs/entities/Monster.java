@@ -13,7 +13,7 @@ public class Monster extends Character
 	{
 		super(x, y);
 		
-		sprite = new Spritemap("gfx/character.png", 16, 16);
+		sprite = new Spritemap("data/gfx/character.png", 16, 16);
 		int type = 8;
 		sprite.add("down",  new int[]{ type + 0, type + 1 }, 0.3f);
 		sprite.add("left",  new int[]{ type + 2, type + 3 }, 0.3f);

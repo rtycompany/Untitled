@@ -55,7 +55,7 @@ public class Map extends Entity implements IWalkable
 		while (it.hasNext())
 		{
 			TiledLayer layer = it.next();
-			Tilemap map = new Tilemap("gfx/tileset.png",
+			Tilemap map = new Tilemap("data/gfx/tileset.png",
 					tmx.tileWidth, tmx.tileHeight,
 					tmx.width, tmx.height,
 					set.spacing, set.margin);

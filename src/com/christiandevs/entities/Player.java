@@ -10,7 +10,7 @@ public class Player extends Character
 	public Player(int x, int y, int type)
 	{
 		super(x, y);
-		sprite = new Spritemap("gfx/character.png", 16, 16);
+		sprite = new Spritemap("data/gfx/character.png", 16, 16);
 		type = type * 8;
 		sprite.add("down",  new int[]{ type + 0, type + 1 }, 0.3f);
 		sprite.add("left",  new int[]{ type + 2, type + 3 }, 0.3f);
