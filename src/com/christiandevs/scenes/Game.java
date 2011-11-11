@@ -10,7 +10,7 @@ public class Game extends Scene
 	public Game()
 	{
 		map = new Map();
-		map.load("maps/world.tmx");
 		add(map);
+		map.load("maps/world.tmx");
 	}
 }

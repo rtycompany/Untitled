@@ -1,6 +1,6 @@
 package com.christiandevs.scenes;
 
-import java.util.Iterator;
+import java.util.*;
 
 import com.christiandevs.entities.Map;
 import com.christiandevs.entities.Character;
@@ -17,10 +17,10 @@ public class Battle extends Scene
 	public Battle()
 	{
 		map = new Map();
+		add(map);
 		map.load("maps/world.tmx");
 		it = map.characters.iterator();
 		character = it.next();
-		add(map);
 	}
 	
 	private void clampCameraToBounds()
