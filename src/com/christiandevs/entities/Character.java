@@ -7,19 +7,21 @@ import com.flume2d.Engine;
 import com.flume2d.ai.PathNode;
 import com.flume2d.graphics.Spritemap;
 
-public abstract class Character extends MapEntity
+public abstract class Character extends MapEntity implements Comparable<Character>
 {
 	
 	protected enum PlayState
 	{
 		Wait,
-		TakeTurn
+		TakeTurn,
+		Moving
 	}
 	
 	public String name;
 	
 	protected String classType;
 	protected Stat health;
+	protected int speed;
 	protected int attack;
 	protected int armor;
 	protected int level;
@@ -48,6 +50,16 @@ public abstract class Character extends MapEntity
 		attack = 1;
 		level = 1;
 		moveSpaces = 3;
+	}
+	
+	@Override
+	public int compareTo(Character c)
+	{
+		if (c.speed > speed)
+			return -1;
+		if (c.speed < speed)
+			return 1;
+		return 0;
 	}
 	
 	public void levelUp()
@@ -79,9 +91,9 @@ public abstract class Character extends MapEntity
 		state = PlayState.TakeTurn;
 	}
 	
-	public boolean isTakingTurn()
+	public boolean isWaiting()
 	{
-		return (state == PlayState.TakeTurn);
+		return (state == PlayState.Wait);
 	}
 	
 	public void focusCamera()

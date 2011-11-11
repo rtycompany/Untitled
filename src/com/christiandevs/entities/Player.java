@@ -27,6 +27,11 @@ public class Player extends Character
 	
 	private void processInput()
 	{
+		if (Input.check(Key.SPACE))
+		{
+			// skip turn
+			state = PlayState.Wait;
+		}
 		if (Input.touched)
 		{
 			Touch touch = Input.touches.get(0);
@@ -35,28 +40,26 @@ public class Player extends Character
 			if (canMoveTo(touch.x, touch.y))
 			{
 				getPathTo(touch.x, touch.y);
-				state = PlayState.Wait;
+				state = PlayState.Moving;
 			}
-			/*
-			if (path == null)
-				System.out.println("No path");
-			else
-			{
-				for (PathNode node : path)
-				{
-					System.out.println(node);
-				}
-			}
-			*/
 		}
 	}
 	
 	@Override
 	public void update()
 	{
-		if (state == PlayState.TakeTurn)
-			processInput();
-		followPath();
+		switch (state)
+		{
+			case TakeTurn:
+				processInput();
+				break;
+			case Moving:
+				if (!followPath())
+				{
+					state = PlayState.Wait;
+				}
+				break;
+		}
 		super.update();
 	}
 	
