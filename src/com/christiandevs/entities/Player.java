@@ -64,10 +64,8 @@ public class Player extends Character
 					Touch touch = Input.touches.get(0);
 					touch.x += scene.camera.x;
 					touch.y += scene.camera.y;
-					Character enemy = attack(touch.x, touch.y);
-					if (enemy != null)
+					if (attack("monster", touch.x, touch.y))
 					{
-						enemy.takeDamage(attack);
 						state = PlayState.Wait;
 					}
 				}

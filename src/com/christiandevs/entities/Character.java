@@ -22,8 +22,9 @@ public abstract class Character extends Entity
 	
 	protected String classType;
 	protected Stat health;
+	protected Stat energy;
 	protected int attack;
-	protected int armor;
+	protected int defense;
 	protected int level;
 	protected int moveSpaces;
 	
@@ -47,8 +48,9 @@ public abstract class Character extends Entity
 		state = PlayState.Wait;
 		
 		health = new Stat(50);
-		armor = 1;
-		attack = 1;
+		energy = new Stat(20);
+		defense = 1;
+		attack = 10;
 		level = 1;
 		moveSpaces = 3;
 	}
@@ -115,9 +117,15 @@ public abstract class Character extends Entity
 		}
 	}
 	
-	protected Character attack(int dx, int dy)
+	protected boolean attack(String type, int dx, int dy)
 	{
-		return null;
+		Entity e = scene.findAt(type, dx, dy);
+		if (e == null)
+			return false;
+		
+		Character c = (Character) e;
+		c.takeDamage(attack);
+		return true;
 	}
 	
 	public void setMap(Map map)

@@ -54,8 +54,11 @@ public class Battle extends Scene
 	 */
 	private void getNextCharacter()
 	{
-		// priority queue orders the characters by their speed
-		character = turnQueue.remove();
+		// Remove characters from the queue until we find someone who isn't dead
+		do {
+			// TODO: do something if the queue is empty
+			character = turnQueue.remove();
+		} while (character.isDead());
 		character.startTurn();
 	}
 	
