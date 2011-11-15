@@ -1,7 +1,8 @@
 package com.christiandevs.entities;
 
 import java.util.*;
-import com.christiandevs.rpg.Stat;
+import com.christiandevs.rpg.*;
+import com.christiandevs.rpg.item.*;
 import com.flume2d.Engine;
 import com.flume2d.Entity;
 import com.flume2d.ai.PathNode;
@@ -23,8 +24,15 @@ public abstract class Character extends Entity
 	protected String classType;
 	protected Stat health;
 	protected Stat energy;
-	protected int attack;
-	protected int defense;
+	
+	protected int evade;
+	protected int strength;
+	protected int stamina;
+	protected int fatigue;
+	
+	protected Weapon weapon;
+	protected Armor armor;
+	
 	protected int level;
 	protected int moveSpaces;
 	
@@ -49,8 +57,6 @@ public abstract class Character extends Entity
 		
 		health = new Stat(50);
 		energy = new Stat(20);
-		defense = 1;
-		attack = 10;
 		level = 1;
 		moveSpaces = 3;
 	}
@@ -117,14 +123,62 @@ public abstract class Character extends Entity
 		}
 	}
 	
+	protected float awareness(Character c)
+	{
+		return 1;
+	}
+	
+	protected int getSkillLevel(SkillType skill)
+	{
+		 return 1;
+	}
+	
+	protected int getWeaponRating()
+	{
+		return weapon.power + getSkillLevel(weapon.skill);
+	}
+	
+	protected int getArmorRating()
+	{
+		return armor.defense + getSkillLevel(armor.skill);
+	}
+	
+	protected void increaseSkill(SkillType skill, int value)
+	{
+		
+	}
+	
 	protected boolean attack(String type, int dx, int dy)
 	{
 		Entity e = scene.findAt(type, dx, dy);
 		if (e == null)
 			return false;
 		
-		Character c = (Character) e;
-		c.takeDamage(attack);
+		Character enemy = (Character) e;
+		return attack(enemy);
+	}
+	
+	protected boolean attack(Character enemy)
+	{
+		if (fatigue > 50)
+			return false;
+		
+		if (weapon.accuracy - fatigue < (enemy.evade - fatigue) * enemy.awareness(this))
+		{
+			// Missed enemy, increase skill
+			enemy.increaseSkill(enemy.armor.skill, 1);
+			fatigue += 1;
+		}
+		else
+		{
+			int attack = (strength * enemy.getWeaponRating());
+			int defense = (enemy.strength * enemy.getArmorRating());
+			int damage = attack - defense;
+			enemy.takeDamage(damage);
+			increaseSkill(weapon.skill, 1);
+			fatigue += 2;
+		}
+		fatigue -= stamina;
 		return true;
 	}
 	
