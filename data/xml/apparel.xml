@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<apparel>
+	<shirt id="shirt">
+        <name>Shirt</name>
+        <desc></desc>
+        <protect>1</protect>
+        <image path="data/gfx/apparel/clothing.png" index="1" />
+    </shirt>
+    <shirt id="robe">
+        <name>Healing Robe</name>
+        <desc></desc>
+        <protect>2</protect>
+        <effect>
+            <stat>health</stat>
+            <addMax>+10</addMax>
+        </effect>
+        <image path="data/gfx/apparel/clothing.png" index="1" />
+    </shirt>
+    <helmet id="hat">
+    	<name>Fancy Hat</name>
+        <desc></desc>
+        <protect>2</protect>
+        <effect>
+            <stat>health</stat>
+            <addMax>+10</addMax>
+        </effect>
+        <image path="data/gfx/apparel/clothing.png" index="1" />
+    </helmet>
+</apparel>

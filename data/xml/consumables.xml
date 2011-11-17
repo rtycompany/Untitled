@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<consumables>
+	<potion id="salve">
+        <name>Healing Salve</name>
+        <desc>An ointment that heals wounds over time</desc>
+        <effect>
+            <stat>health</stat>
+            <buff>10</buff>
+            <time>5</time>
+        </effect>
+        <image path="data/gfx/item/potion.png" index="1" />
+    </potion>
+    <potion id="con_poison">
+        <name>Poison</name>
+        <desc></desc>
+        <effect>
+            <stat>health</stat>
+            <drain>20</drain>
+        </effect>
+        <image path="data/gfx/item/potion.png" index="3" />
+    </potion>
+</consumables>
