@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<apparel>
+	<shirt id="shirt">
+		<name>Shirt</name>
+		<desc></desc>
+		<rating>1</rating>
+		<image path="data/gfx/apparel/clothing.png" index="1" />
+	</shirt>
+	<shirt id="robe">
+		<name>Healing Robe</name>
+		<desc></desc>
+		<rating>2</rating>
+		<effects>
+			<effect>
+				<stat>health</stat>
+				<increase>20</increase>
+			</effect>
+		</effects>
+		<image path="data/gfx/apparel/clothing.png" index="1" />
+	</shirt>
+	<helmet id="hat">
+		<name>Fancy Hat</name>
+		<desc></desc>
+		<rating>2</rating>
+		<effects>
+			<effect>
+				<stat>health</stat>
+				<drain>20</drain>
+			</effect>
+		</effects>
+		<image path="data/gfx/apparel/clothing.png" index="1" />
+	</helmet>
+</apparel>
