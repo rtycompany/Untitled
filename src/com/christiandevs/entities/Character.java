@@ -22,16 +22,19 @@ public abstract class Character extends Entity
 	public String name;
 	
 	protected String classType;
+	
 	protected Stat health;
 	protected Stat energy;
+	protected Stat fatigue;
 	
 	protected int evade;
 	protected int strength;
 	protected int stamina;
-	protected int fatigue;
+	protected int accuracy;
 	
 	protected Weapon weapon;
 	protected Armor armor;
+	protected HashMap<SkillType, Integer> skills;
 	
 	protected int level;
 	protected int moveSpaces;
@@ -54,9 +57,14 @@ public abstract class Character extends Entity
 		super(x, y);
 		
 		state = PlayState.Wait;
+		skills = new HashMap<SkillType, Integer>();
 		
 		health = new Stat(50);
 		energy = new Stat(20);
+		fatigue = new Stat(20);
+		
+		strength = 1;
+		stamina = 2;
 		level = 1;
 		moveSpaces = 3;
 	}
@@ -125,27 +133,53 @@ public abstract class Character extends Entity
 	
 	protected float awareness(Character c)
 	{
-		return 1;
+		return 0;
 	}
 	
 	protected int getSkillLevel(SkillType skill)
 	{
-		 return 1;
+		if (skills.containsKey(skill))
+			return skills.get(skill);
+		
+		return 0;
 	}
 	
 	protected int getWeaponRating()
 	{
+		if (weapon == null)
+			return 1;
 		return weapon.power + getSkillLevel(weapon.skill);
 	}
 	
 	protected int getArmorRating()
 	{
+		if (armor == null)
+			return 0;
 		return armor.defense + getSkillLevel(armor.skill);
+	}
+	
+	protected SkillType getArmorSkill()
+	{
+		if (armor == null)
+			return SkillType.ArmorNone;
+		
+		return armor.skill;
+	}
+	
+	protected SkillType getWeaponSkill()
+	{
+		if (weapon == null)
+			return SkillType.WeaponUnarmed;
+		
+		return weapon.skill;
 	}
 	
 	protected void increaseSkill(SkillType skill, int value)
 	{
-		
+		int current = 0;
+		if (skills.containsKey(skill))
+			current = skills.get(skill);
+		skills.put(skill, current + value);
 	}
 	
 	protected boolean attack(String type, int dx, int dy)
@@ -160,25 +194,26 @@ public abstract class Character extends Entity
 	
 	protected boolean attack(Character enemy)
 	{
-		if (fatigue > 50)
+		fatigue.buff(stamina);
+		if (fatigue.depleted())
 			return false;
 		
-		if (weapon.accuracy - fatigue < (enemy.evade - fatigue) * enemy.awareness(this))
+		if (accuracy - fatigue.getValue() < (enemy.evade - fatigue.getValue()) * enemy.awareness(this))
 		{
 			// Missed enemy, increase skill
-			enemy.increaseSkill(enemy.armor.skill, 1);
-			fatigue += 1;
+			enemy.increaseSkill(enemy.getArmorSkill(), 1);
+			fatigue.drain(1);
 		}
 		else
 		{
-			int attack = (strength * enemy.getWeaponRating());
+			int attack = (strength * getWeaponRating());
 			int defense = (enemy.strength * enemy.getArmorRating());
 			int damage = attack - defense;
 			enemy.takeDamage(damage);
-			increaseSkill(weapon.skill, 1);
-			fatigue += 2;
+			
+			increaseSkill(getWeaponSkill(), 1);
+			fatigue.drain(2);
 		}
-		fatigue -= stamina;
 		return true;
 	}
 	

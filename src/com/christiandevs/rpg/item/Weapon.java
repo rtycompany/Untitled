@@ -1,5 +1,7 @@
 package com.christiandevs.rpg.item;
 
+import com.christiandevs.rpg.SkillType;
+
 public class Weapon extends Item
 {
 

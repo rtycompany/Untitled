@@ -1,11 +1,13 @@
-package com.christiandevs.rpg.item;
+package com.christiandevs.rpg;
 
 public enum SkillType
 {
+	ArmorNone,
 	ArmorLight,
 	ArmorHeavy,
 	WeaponBow,
 	WeaponBlade,
 	WeaponBlunt,
-	WeaponPole
+	WeaponPole,
+	WeaponUnarmed
 }
