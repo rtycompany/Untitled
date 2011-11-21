@@ -32,11 +32,13 @@ public abstract class Character extends Entity
 	protected int stamina;
 	protected int accuracy;
 	
+	protected int experience;
+	protected int level;
+	
 	protected Weapon weapon;
 	protected Armor armor;
 	protected HashMap<SkillType, Integer> skills;
 	
-	protected int level;
 	protected int moveSpaces;
 	
 	protected Spritemap sprite;
@@ -62,6 +64,9 @@ public abstract class Character extends Entity
 		health = new Stat(50);
 		energy = new Stat(20);
 		fatigue = new Stat(20);
+		
+		evade = 1;
+		accuracy = 1;
 		
 		strength = 1;
 		stamina = 2;
@@ -219,6 +224,26 @@ public abstract class Character extends Entity
 	protected void increaseSkill(SkillType skill, int value)
 	{
 		skills.put(skill, skills.get(skill) + value);
+		// TODO: gained experience should be based on skill value/level
+		experience += 10;
+	}
+	
+	/**
+	 * Roll dice
+	 * @param sides number of sides
+	 * @param times how many times to roll and add the values
+	 * @return the value of the die
+	 */
+	protected int rollDie(int sides, int times)
+	{
+		int value = 0;
+		System.out.print("Rolling " + sides + "-sided die " + times + " times; value: ");
+		while (times-- > 0)
+		{
+			value += Math.random() * sides;
+		}
+		System.out.println(value);
+		return value;
 	}
 	
 	/**
@@ -241,30 +266,32 @@ public abstract class Character extends Entity
 	/**
 	 * Attacks an enemy character
 	 * @param enemy the character to attack
-	 * @return if we successfully attacked the character
+	 * @return always true because we attempted to attack an enemy
 	 */
 	protected boolean attack(Character enemy)
 	{
+		System.out.println("Attacking");
 		fatigue.buff(stamina);
 		if (fatigue.depleted())
-			return false;
+			return true;
 		
-		if (accuracy - fatigue.getValue() < (enemy.evade - fatigue.getValue()) * enemy.awareness(this))
+		if (rollDie(20, accuracy) < rollDie(20, enemy.evade) * enemy.awareness(this))
 		{
 			// Missed enemy, increase skill
 			enemy.increaseSkill(enemy.getArmorSkill(), 1);
 			fatigue.drain(1);
-			return false;
+			System.out.println("miss...");
 		}
 		else
 		{
-			int attack = (strength * getWeaponRating());
-			int defense = (enemy.strength * enemy.getArmorRating());
+			int attack = rollDie(20, strength) * getWeaponRating();
+			int defense = rollDie(20, enemy.strength) * enemy.getArmorRating();
 			int damage = attack - defense;
 			enemy.takeDamage(damage);
 			
 			increaseSkill(getWeaponSkill(), 1);
 			fatigue.drain(2);
+			System.out.println("hit for " + damage);
 		}
 		return true;
 	}

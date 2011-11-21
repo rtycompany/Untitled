@@ -72,6 +72,7 @@ public class Battle extends Scene
 		int playerCount = 0;
 		int enemyCount = 0;
 		
+		// the turn queue has all characters that are still alive
 		Iterator<Character> it = turnQueue.iterator();
 		while (it.hasNext())
 		{
