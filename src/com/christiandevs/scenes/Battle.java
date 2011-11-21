@@ -69,25 +69,26 @@ public class Battle extends Scene
 	 */
 	private void checkCondition()
 	{
-		int playerCount = 0;
-		int enemyCount = 0;
+		List<String> counts = new LinkedList<String>();
 		
 		// the turn queue has all characters that are still alive
 		Iterator<Character> it = turnQueue.iterator();
 		while (it.hasNext())
 		{
 			Character c = it.next();
-			if (c.type == "player")
-				playerCount += 1;
-			else
-				enemyCount += 1;
+			if (c.isDead())
+				continue;
+			
+			// count up living characters
+			counts.add(c.type);
 		}
 		
-		if (enemyCount == 0)
+		if (counts.contains("monster") == false)
 		{
+			// monsters are all dead
 			System.out.println("You won!");
 		}
-		else if (playerCount == 0)
+		else if (counts.contains("player") == false)
 		{
 			System.out.println("You lost!");
 		}
