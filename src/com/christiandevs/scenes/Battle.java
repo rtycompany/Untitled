@@ -62,14 +62,45 @@ public class Battle extends Scene
 		character.startTurn();
 	}
 	
+	/**
+	 * If all enemies are dead, win.
+	 * If all player characters are dead, lose.
+	 * This could also check for variations (defeat the leader, capture a point, etc...)
+	 */
+	private void checkCondition()
+	{
+		int playerCount = 0;
+		int enemyCount = 0;
+		
+		Iterator<Character> it = turnQueue.iterator();
+		while (it.hasNext())
+		{
+			Character c = it.next();
+			if (c.type == "player")
+				playerCount += 1;
+			else
+				enemyCount += 1;
+		}
+		
+		if (enemyCount == 0)
+		{
+			System.out.println("You won!");
+		}
+		else if (playerCount == 0)
+		{
+			System.out.println("You lost!");
+		}
+	}
+	
 	@Override
 	public void update()
 	{
 		// Check if the character is done with their turn
-		if (character.isWaiting())
+		if (character.isDone())
 		{
 			// add the character back onto the queue
 			turnQueue.offer(character);
+			checkCondition();
 			getNextCharacter();
 		}
 		

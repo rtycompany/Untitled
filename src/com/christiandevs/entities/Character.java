@@ -129,10 +129,10 @@ public abstract class Character extends Entity
 	}
 	
 	/**
-	 * Are we still waiting for the character to do something?
-	 * @return character is still thinking
+	 * Check if the character is done with it's turn
+	 * @return if the character is waiting, it is done
 	 */
-	public boolean isWaiting()
+	public boolean isDone()
 	{
 		return (state == PlayState.Wait);
 	}
