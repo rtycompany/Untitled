@@ -104,6 +104,7 @@ public abstract class Character extends Entity
 	public void takeDamage(int value)
 	{
 		health.drain(value);
+		System.out.println("Health at " + (health.getPercent() * 100) + "%");
 		if (health.depleted())
 			kill();
 	}
@@ -188,7 +189,7 @@ public abstract class Character extends Entity
 	protected float awareness(Character c)
 	{
 		// back facing should be something like 0.25
-		return 0;
+		return 0.5f;
 	}
 	
 	protected int getWeaponRating()
@@ -279,7 +280,7 @@ public abstract class Character extends Entity
 		{
 			// Missed enemy, increase skill
 			enemy.increaseSkill(enemy.getArmorSkill(), 1);
-			fatigue.drain(1);
+			fatigue.drain(enemy.getArmorRating());
 			System.out.println("miss...");
 		}
 		else
@@ -290,7 +291,7 @@ public abstract class Character extends Entity
 			enemy.takeDamage(damage);
 			
 			increaseSkill(getWeaponSkill(), 1);
-			fatigue.drain(2);
+			fatigue.drain(getWeaponRating());
 			System.out.println("hit for " + damage);
 		}
 		return true;

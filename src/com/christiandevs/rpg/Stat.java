@@ -56,14 +56,17 @@ public class Stat
 	}
 	
 	/**
-	 * Gets the current value
-	 * @return the stat value
+	 * Gets the current percentage value
+	 * @return the stat percent (0 to 1)
 	 */
-	public int getValue()
+	public float getPercent()
 	{
-		return value;
+		return value / (float) maxValue;
 	}
 	
+	/**
+	 * Sets the stat to full
+	 */
 	public void refill()
 	{
 		value = maxValue;
