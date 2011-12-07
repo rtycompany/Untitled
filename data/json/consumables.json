@@ -1,0 +1,33 @@
+[
+	{
+		"name": "Healing Salve",
+		"type": "potion",
+		"desc": "An ointment that heals wounds over time",
+		"effects": [
+			{
+				"stat": "health",
+				"boost": 10,
+				"time": 5
+			}
+		],
+		"image": {
+			"path": "data/gfx/item/potion.png",
+			"index": 1
+		}
+	},
+	{
+		"name": "Poison",
+		"type": "potion",
+		"desc": "A deadly poison",
+		"effects": [
+			{
+				"stat": "health",
+				"drain": 20
+			}
+		],
+		"image": {
+			"path": "data/gfx/item/potion.png",
+			"index": 1
+		}
+	}
+]

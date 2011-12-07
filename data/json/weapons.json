@@ -1,0 +1,11 @@
+[
+	{
+		"name": "Dagger",
+		"desc": "A shiny dagger",
+		"attack": 5,
+		"image": {
+			"path": "data/gfx/weapon/dagger.png",
+			"index": 1
+		}
+	}
+]

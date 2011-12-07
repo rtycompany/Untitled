@@ -1,0 +1,48 @@
+[
+	{
+		"name": "Shirt",
+		"type": "shirt",
+		"desc": "A nice looking shirt",
+		"rating": 1,
+		"image": {
+			"path": "data/gfx/apparel/clothing.png",
+			"index": 1
+		}
+	},
+	{
+		"name": "Healing Robe",
+		"type": "shirt",
+		"desc": "A beautiful robe that heals you",
+		"rating": 2,
+		"image": {
+			"path": "data/gfx/apparel/clothing.png",
+			"index": 2
+		},
+		"effects": [
+			{
+				"stat": "health",
+				"boost": 2
+			}
+		]
+	},
+	{
+		"name": "Fancy Hat",
+		"type": "helmet",
+		"desc": "A fancy hat",
+		"rating": 2,
+		"effects": [
+			{
+				"stat": "magic",
+				"drain": 20
+			},
+			{
+				"stat": "health",
+				"boost": 20
+			}
+		],
+		"image": {
+			"path": "data/gfx/apparel/clothing.png",
+			"index": 3
+		}
+	}
+]

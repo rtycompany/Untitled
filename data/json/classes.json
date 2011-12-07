@@ -1,0 +1,27 @@
+[
+	{
+		"name": "Warrior",
+		"desc": "A hearty warrior",
+		"stats": {
+			"health": 10,
+			"attack": 10,
+			"defense": 5
+		},
+		"skills": [
+			"berserk"
+		]
+	},
+	{
+		"name": "Paladin",
+		"desc": "A righteous warrior",
+		"stats": {
+			"health": 5,
+			"attack": 5,
+			"defense": 15
+		},
+		"skills": [
+			"heal",
+			"bless"
+		]
+	}
+]

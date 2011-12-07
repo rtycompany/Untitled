@@ -1,9 +1,0 @@
-<?xml version="1.0" ?>
-<weapons>
-	<weapon id="dagger">
-        <name>Dagger</name>
-        <desc></desc>
-        <attack>5</attack>
-        <image path="data/gfx/weapon/dagger.png" index="1" />
-    </weapon>
-</weapons>
