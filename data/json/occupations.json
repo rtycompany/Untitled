@@ -1,0 +1,16 @@
+[
+	{
+		"name": "Teacher",
+		"desc": "A scholar",
+		"stats": {
+			"defense": 5
+		}
+	},
+	{
+		"name": "Warrior",
+		"desc": "A brave individual",
+		"stats": {
+			"attack": 15
+		}
+	}
+]

@@ -1,0 +1,13 @@
+{
+	"name": "John",
+	"rules": [
+		{
+			"rule": "default",
+			"text": "Hello, my name is John!",
+			"response": [
+				"Hello!",
+				"Goodbye"
+			]
+		}
+	]
+}
