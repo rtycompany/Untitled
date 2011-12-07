@@ -1,0 +1,43 @@
+[
+	{
+		"name": "Human",
+		"desc": "A hearty warrior",
+		"home": "Earth",
+		"stats": {
+			"health": 10,
+			"attack": 10,
+			"defense": 5
+		},
+		"skills": [
+			"berserk"
+		],
+		"sprite": {
+			"image": "data/gfx/class/warrior.png",
+			"animations": {
+				"walk": [1, 2, 3, 2],
+				"idle": [0]
+			}
+		}
+	},
+	{
+		"name": "Elf",
+		"desc": "A spirited being",
+		"home": "Rivendell",
+		"stats": {
+			"health": 5,
+			"attack": 5,
+			"defense": 15
+		},
+		"skills": [
+			"heal",
+			"bless"
+		],
+		"sprite": {
+			"image": "data/gfx/class/paladin.png",
+			"animations": {
+				"walk": [1, 2, 3, 2],
+				"idle": [0]
+			}
+		}
+	}
+]
