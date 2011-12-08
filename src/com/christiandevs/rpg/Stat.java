@@ -1,6 +1,10 @@
 package com.christiandevs.rpg;
 
-public class Stat
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONString;
+
+public class Stat implements JSONString
 {
 
 	int maxValue;
@@ -79,6 +83,16 @@ public class Stat
 	public void modifyMax(int maxModifier)
 	{
 		maxValue += maxModifier;
+	}
+
+	@Override
+	public String toJSONString() {
+		return "{\"max\":" + maxValue + ",\"value\":" + value + "}";
+	}
+
+	public void load(JSONObject obj) throws JSONException {
+		maxValue = obj.getInt("max");
+		value = obj.getInt("value");
 	}
 	
 }

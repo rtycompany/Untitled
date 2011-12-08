@@ -1,0 +1,31 @@
+{
+    "name": "Mighty Max",
+    "level": 1,
+    "experience": 0,
+    "health": {
+        "max": 50,
+        "value": 50
+    },
+    "energy": {
+        "max": 20,
+        "value": 20
+    },
+    "fatigue": {
+        "max": 20,
+        "value": 20
+    },
+    "strength": 1,
+    "evade": 1,
+    "accuracy": 1,
+    "stamina": 2,
+    "skills": {
+        "WeaponPole": 1,
+        "ArmorLight": 1,
+        "WeaponUnarmed": 1,
+        "WeaponBlunt": 1,
+        "WeaponBow": 1,
+        "WeaponBlade": 1,
+        "ArmorHeavy": 1,
+        "ArmorNone": 1
+    }
+}

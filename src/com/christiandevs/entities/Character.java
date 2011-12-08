@@ -1,6 +1,10 @@
 package com.christiandevs.entities;
 
+import java.io.*;
 import java.util.*;
+
+import org.json.*;
+
 import com.christiandevs.rpg.*;
 import com.christiandevs.rpg.item.*;
 import com.flume2d.Engine;
@@ -61,6 +65,7 @@ public abstract class Character extends Entity
 		state = PlayState.Wait;
 		initSkills();
 		
+		name = "";
 		health = new Stat(50);
 		energy = new Stat(20);
 		fatigue = new Stat(20);
@@ -72,6 +77,55 @@ public abstract class Character extends Entity
 		stamina = 2;
 		level = 1;
 		moveSpaces = 3;
+		try {
+			loadJSON("data/character.json");
+			saveJSON("data/save.json");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadJSON(String filename) throws FileNotFoundException, JSONException
+	{
+		JSONTokener tk = new JSONTokener(new FileReader(filename));
+		JSONObject obj = new JSONObject(tk);
+		
+		name = obj.getString("name");
+		experience = obj.getInt("experience");
+		level = obj.getInt("level");
+		health.load(obj.getJSONObject("health"));
+		energy.load(obj.getJSONObject("energy"));
+		fatigue.load(obj.getJSONObject("fatigue"));
+	}
+	
+	private void saveJSON(String filename) throws IOException, JSONException
+	{
+		FileWriter out = new FileWriter(filename);
+		JSONWriter json = new JSONWriter(out);
+		json.object();
+		json.key("name").value(name);
+		json.key("level").value(level);
+		json.key("experience").value(experience);
+		json.key("health").value(health);
+		json.key("energy").value(energy);
+		json.key("fatigue").value(fatigue);
+		json.key("strength").value(strength);
+		json.key("evade").value(evade);
+		json.key("accuracy").value(accuracy);
+		json.key("stamina").value(stamina);
+		json.key("skills").object();
+		Iterator<SkillType> it = skills.keySet().iterator();
+		while (it.hasNext())
+		{
+			SkillType type = it.next();
+			json.key(type.toString());
+			json.value(skills.get(type));
+		}
+		json.endObject();
+		json.endObject();
+		out.close();
 	}
 	
 	/**
