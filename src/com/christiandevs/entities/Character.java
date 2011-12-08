@@ -95,9 +95,9 @@ public abstract class Character extends Entity
 		name = obj.getString("name");
 		experience = obj.getInt("experience");
 		level = obj.getInt("level");
-		health.load(obj.getJSONObject("health"));
-		energy.load(obj.getJSONObject("energy"));
-		fatigue.load(obj.getJSONObject("fatigue"));
+		health.loadJSON(obj.getJSONObject("health"));
+		energy.loadJSON(obj.getJSONObject("energy"));
+		fatigue.loadJSON(obj.getJSONObject("fatigue"));
 	}
 	
 	private void saveJSON(String filename) throws IOException, JSONException

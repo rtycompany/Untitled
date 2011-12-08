@@ -85,12 +85,20 @@ public class Stat implements JSONString
 		maxValue += maxModifier;
 	}
 
+	/**
+	 * Serializes stat to a JSON string
+	 */
 	@Override
 	public String toJSONString() {
 		return "{\"max\":" + maxValue + ",\"value\":" + value + "}";
 	}
 
-	public void load(JSONObject obj) throws JSONException {
+	/**
+	 * Loads from a JSONObject
+	 * @param obj the JSONObject to load from
+	 * @throws JSONException
+	 */
+	public void loadJSON(JSONObject obj) throws JSONException {
 		maxValue = obj.getInt("max");
 		value = obj.getInt("value");
 	}
