@@ -5,12 +5,17 @@
 		"home": "Earth",
 		"stats": {
 			"health": 10,
-			"attack": 10,
-			"defense": 5
+			"defense": 5,
+			"strength": 10,
+			"accuracy": 6,
+			"stamina": 8,
+			"evade": 5
 		},
-		"skills": [
-			"berserk"
-		],
+		"skills": {
+			"armorHeavy": 10,
+			"weaponBlade": 10,
+			"weaponBlunt": 5
+		},
 		"sprite": {
 			"image": "data/gfx/class/warrior.png",
 			"animations": {
@@ -25,13 +30,17 @@
 		"home": "Rivendell",
 		"stats": {
 			"health": 5,
-			"attack": 5,
-			"defense": 15
+			"strength": 5,
+			"defense": 8,
+			"accuracy": 12,
+			"stamina": 12,
+			"evade": 5
 		},
-		"skills": [
-			"heal",
-			"bless"
-		],
+		"skills": {
+			"armorLight": 10,
+			"weaponBow": 10,
+			"armorNone": 5
+		},
 		"sprite": {
 			"image": "data/gfx/class/paladin.png",
 			"animations": {
