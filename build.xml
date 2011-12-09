@@ -1,0 +1,59 @@
+<project name="Untitled" default="dist" basedir=".">
+	<description>Builds the Untiled RPG project</description>
+
+	<target name="-load-properties">
+		<property file="ant.properties"/>
+	</target>
+
+	<target name="-init" depends="-load-properties">
+		<tstamp/>
+		<path id="libs.list">
+			<fileset dir="${lib}">
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+	</target>
+
+	<target name="compile" depends="-init">
+		<mkdir dir="${build}"/>
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<classpath refid="libs.list"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${dist}"/>
+		<manifestclasspath property="libs.list" jarfile="${jar.file}">
+			<classpath refid="libs.list"/>
+		</manifestclasspath>
+		<jar jarfile="${jar.file}" basedir="${build}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Class-Path" value="${libs.list}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="dist" depends="jar">
+		<delete dir="${dist}"/>
+		<mkdir dir="${dist}"/>
+		<move file="${jar.file}" tofile="${dist}/${jar.file}"/>
+		<copy todir="${dist}/${lib}">
+			<fileset dir="${lib}"/>
+		</copy>
+		<copy todir="${dist}/${res}">
+			<fileset dir="${res}"/>
+		</copy>
+	</target>
+
+	<target name="run" depends="-load-properties">
+		<java jar="${dist}/${jar.file}" fork="true"/>
+	</target>
+
+	<target name="clean" depends="-load-properties">
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+
+</project>
